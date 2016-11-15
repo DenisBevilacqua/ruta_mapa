@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="dam.isi.frsf.utn.edu.ar.lab05.MainActivity">
+    <item
+        android:id="@+id/limpiar"
+        android:orderInCategory="100"
+        android:title="Limpiar mapa"
+        app:showAsAction="never" />
+</menu>
