@@ -7,4 +7,10 @@
         android:orderInCategory="100"
         android:title="Limpiar mapa"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/nueva_ruta"
+        android:orderInCategory="100"
+        android:title="Limpiar mapa"
+        app:showAsAction="never" />
 </menu>

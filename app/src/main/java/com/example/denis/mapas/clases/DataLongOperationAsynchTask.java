@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.denis.mapas.MapsActivity;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +24,14 @@ import javax.net.ssl.HttpsURLConnection;
  */
 
 public class DataLongOperationAsynchTask extends AsyncTask<String, Void, String[]> {
-    ProgressDialog dialog = new ProgressDialog(MapsActivity.contexto);
+
+    public interface AsyncResponse {
+        void processFinish(String output);
+    }
+
+    public AsyncResponse delegate = null;
+
+    //ProgressDialog dialog = new ProgressDialog(MapsActivity.contexto);
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -59,6 +67,10 @@ public class DataLongOperationAsynchTask extends AsyncTask<String, Void, String[
 
             Log.d("latitude", "" + lat);
             Log.d("longitude", "" + lng);
+
+            LatLng latLng = new LatLng(lat,lng);
+
+            delegate.processFinish(lat+","+lng);
 
         } catch (JSONException e) {
             e.printStackTrace();

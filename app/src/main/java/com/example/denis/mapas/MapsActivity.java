@@ -3,6 +3,7 @@ package com.example.denis.mapas;
 import android.*;
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,7 +42,7 @@ import java.util.List;
 
 import im.delight.android.location.SimpleLocation;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, DirectionCallback {
+public class MapsActivity extends AppCompatActivity implements DataLongOperationAsynchTask.AsyncResponse, OnMapReadyCallback, View.OnClickListener, DirectionCallback {
     private Button btnRequestDirection;
     private GoogleMap googleMap;
     private String serverKey = "AIzaSyAkVcdTXj47qfUPWnDKNK_d2luTpcx1PmM";
@@ -56,6 +57,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private boolean mostrandoMapa = false;
     private SimpleLocation location;
+    DataLongOperationAsynchTask asyncTask =new DataLongOperationAsynchTask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +68,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         contexto = getApplicationContext();
 
         // Convertir una direccion en String a latitud y longitud.
-        DataLongOperationAsynchTask task=new DataLongOperationAsynchTask();
-        task.execute();
+        /*DataLongOperationAsynchTask task=new DataLongOperationAsynchTask();
+        task.execute();*/
 
+//this to set delegate/listener back to this class
+        asyncTask.delegate = this;
+
+        //execute the async task
+        asyncTask.execute();
 
         btnRequestDirection = (Button) findViewById(R.id.btn_request_direction);
         btnRequestDirection.setOnClickListener(this);
@@ -109,6 +116,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    public void processFinish(String output){
+        //Here you will receive the result fired from async class
+        //of onPostExecute(result) method.
+
+        Toast.makeText(getApplicationContext(), "Valor de api recibido geolocation " + output,
+                Toast.LENGTH_LONG).show();
+
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -129,6 +146,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             btnRequestDirection.setText("Mostrar ruta");
             mostrandoMapa = false;
 
+            return true;
+        }
+
+        if (id == R.id.nueva_ruta) {
+
+            Intent intActAlta= new Intent(this,AltaRuta.class);
+            //intActAlta.putExtra("ID_TAREA", 0);
+            // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+            startActivity(intActAlta);
             return true;
         }
 
