@@ -71,7 +71,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             googleMap.addMarker(new MarkerOptions().position(destination));
 
             ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
-            googleMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 8, Color.BLUE));
+            googleMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 7, Color.BLUE));
 
             btnRequestDirection.setVisibility(View.GONE);
         }
