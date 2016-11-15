@@ -16,8 +16,18 @@
         android:id="@+id/btn_request_direction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Mostrar ruta"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Mostrar ruta" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="53dp" />
+
+    <Button
+        android:text="Mi ubicación"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/botonUbicacionActual"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/btn_request_direction"
+        android:layout_marginEnd="38dp" />
 
 </RelativeLayout>
