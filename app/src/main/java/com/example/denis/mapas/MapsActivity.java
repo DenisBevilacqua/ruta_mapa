@@ -2,6 +2,7 @@ package com.example.denis.mapas;
 
 import android.*;
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.example.denis.mapas.clases.DataLongOperationAsynchTask;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.maps.CameraUpdate;
@@ -35,6 +37,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import im.delight.android.location.SimpleLocation;
 
@@ -49,6 +52,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng origenActual;
     private LatLng destinoActual;
     private Integer color;
+    static public Context contexto;
 
     private boolean mostrandoMapa = false;
     private SimpleLocation location;
@@ -59,6 +63,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_simple_direction);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        contexto = getApplicationContext();
+
+        // Convertir una direccion en String a latitud y longitud.
+        DataLongOperationAsynchTask task=new DataLongOperationAsynchTask();
+        task.execute();
+
 
         btnRequestDirection = (Button) findViewById(R.id.btn_request_direction);
         btnRequestDirection.setOnClickListener(this);
@@ -80,7 +90,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
 
                 location.beginUpdates();
-                
+
 
                 final double latitude = location.getLatitude();
                 final double longitude = location.getLongitude();
