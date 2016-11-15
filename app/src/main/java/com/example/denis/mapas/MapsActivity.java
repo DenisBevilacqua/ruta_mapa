@@ -28,6 +28,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng camera = new LatLng(-31.649846, -60.717204);
     private LatLng origin = new LatLng(-31.649846, -60.717204);
     private LatLng destination = new LatLng(-31.616424, -60.675253);
+    private boolean mostrandoMapa = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_request_direction) {
+            if (mostrandoMapa == false)
             requestDirection();
+            else
+            {
+                googleMap.clear();
+                btnRequestDirection.setText("Mostrar ruta");
+                mostrandoMapa = false;
+
+            }
         }
     }
 
@@ -67,13 +76,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onDirectionSuccess(Direction direction, String rawBody) {
         Snackbar.make(btnRequestDirection, "Se ha realizado la operación con el siguiente estado: " + direction.getStatus(), Snackbar.LENGTH_SHORT).show();
         if (direction.isOK()) {
+
+            mostrandoMapa = true;
+            btnRequestDirection.setText("Limpiar mapa");
+            btnRequestDirection.setVisibility(View.VISIBLE);
             googleMap.addMarker(new MarkerOptions().position(origin));
             googleMap.addMarker(new MarkerOptions().position(destination));
 
             ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
             googleMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 7, Color.BLUE));
 
-            btnRequestDirection.setVisibility(View.GONE);
         }
     }
 
