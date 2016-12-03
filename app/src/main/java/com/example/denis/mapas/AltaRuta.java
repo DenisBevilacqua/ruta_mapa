@@ -20,17 +20,24 @@ public class AltaRuta extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Seteo del layout a la actividad.
         setContentView(R.layout.activity_alta_ruta);
 
+        // Boton CREAR RUTA
         btn_crear_ruta = (Button) findViewById(R.id.btn_crear_ruta);
 
+        // EditTexts origen y destino.
         origen = (EditText) findViewById(R.id.origen);
         destino = (EditText) findViewById(R.id.destino);
 
+        // Listener en clase anonima. Se ejecuta cuando presionamos el botón "Crear ruta".
         btn_crear_ruta.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
+                // Obtenemos los valores de los EditTexts y los asignamos a 2 variables String.
 
                 String origenString = origen.getText().toString();
                 String destinoString = destino.getText().toString();
