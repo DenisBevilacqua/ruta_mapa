@@ -23,7 +23,9 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by denis on 15/11/16.
  */
 
-public class DataLongOperationAsynchTask extends AsyncTask<String, Void, String[]> {
+// Tarea asincrónica que permite obtener una ubicacion en latitud y longitud a partir de una cadena de string.
+
+public class GetLatLngFromString extends AsyncTask<String, Void, String[]> {
 
     public interface AsyncResponse {
         void processFinish(String output);
@@ -40,6 +42,7 @@ public class DataLongOperationAsynchTask extends AsyncTask<String, Void, String[
         dialog.show();*/
     }
 
+    // Recibimos una cadena de string y usamos la API de google geolocalization para en segundo plano.
     @Override
     protected String[] doInBackground(String... params) {
         String response;

@@ -25,7 +25,7 @@ import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.example.denis.mapas.clases.DataLongOperationAsynchTask;
+import com.example.denis.mapas.clases.GetLatLngFromString;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.maps.CameraUpdate;
@@ -42,7 +42,7 @@ import java.util.List;
 
 import im.delight.android.location.SimpleLocation;
 
-public class MapsActivity extends AppCompatActivity implements DataLongOperationAsynchTask.AsyncResponse, OnMapReadyCallback, View.OnClickListener, DirectionCallback {
+public class MapsActivity extends AppCompatActivity implements GetLatLngFromString.AsyncResponse, OnMapReadyCallback, View.OnClickListener, DirectionCallback {
     private Button btnRequestDirection;
     private GoogleMap googleMap;
     private String serverKey = "AIzaSyAkVcdTXj47qfUPWnDKNK_d2luTpcx1PmM";
@@ -57,7 +57,7 @@ public class MapsActivity extends AppCompatActivity implements DataLongOperation
 
     private boolean mostrandoMapa = false;
     private SimpleLocation location;
-    DataLongOperationAsynchTask asyncTask =new DataLongOperationAsynchTask();
+    GetLatLngFromString asyncTask =new GetLatLngFromString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class MapsActivity extends AppCompatActivity implements DataLongOperation
         /*DataLongOperationAsynchTask task=new DataLongOperationAsynchTask();
         task.execute();*/
 
-//this to set delegate/listener back to this class
+        //this to set delegate/listener back to this class
         asyncTask.delegate = this;
 
         //execute the async task
@@ -98,7 +98,6 @@ public class MapsActivity extends AppCompatActivity implements DataLongOperation
 
                 location.beginUpdates();
 
-
                 final double latitude = location.getLatitude();
                 final double longitude = location.getLongitude();
                 miUbicacion = new LatLng(latitude,longitude);
@@ -108,6 +107,7 @@ public class MapsActivity extends AppCompatActivity implements DataLongOperation
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 14));
 
                 color = Color.parseColor("#DF7401");
+
                 requestDirection(miUbicacion, originRoute, color);
 
             }
@@ -185,6 +185,7 @@ public class MapsActivity extends AppCompatActivity implements DataLongOperation
         }
     }
 
+    // Funcion que utiliza la libreria requestDirection que utiliza la API Google Directions.
     public void requestDirection(LatLng origin, LatLng destination, Integer color) {
         Snackbar.make(btnRequestDirection, "Buscando dirección...", Snackbar.LENGTH_SHORT).show();
         GoogleDirection.withServerKey(serverKey)
@@ -198,6 +199,7 @@ public class MapsActivity extends AppCompatActivity implements DataLongOperation
         this.color = color;
     }
 
+    // Luego de requerir la ruta utilizando requestDirection, si sale bien entramos a esta función.
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
         Snackbar.make(btnRequestDirection, "Se ha realizado la operación con el siguiente estado: " + direction.getStatus(), Snackbar.LENGTH_LONG).show();
