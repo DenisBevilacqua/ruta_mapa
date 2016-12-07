@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Mapas</string>
     <string name="title_activity_maps">Ruta entre 2 puntos</string>
+    <string name="title_activity_listado_recorridos">ListadoRecorridosActivity</string>
 </resources>

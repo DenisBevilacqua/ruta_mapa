@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.denis.mapas.clases.GetLatLngFromString;
+import com.example.denis.mapas.clases.Recorrido;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.maps.CameraUpdate;
@@ -58,6 +60,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     private boolean mostrandoMapa = false;
     private SimpleLocation location;
     GetLatLngFromString asyncTask =new GetLatLngFromString();
+    static final int ALTA_RUTA = 1;  // The request code
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         asyncTask.delegate = this;
 
         //execute the async task
-        asyncTask.execute();
+        //asyncTask.execute();
 
         btnRequestDirection = (Button) findViewById(R.id.btn_request_direction);
         btnRequestDirection.setOnClickListener(this);
@@ -84,6 +87,9 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
         // construct a new instance of SimpleLocation
         location = new SimpleLocation(this);
+
+
+
 
         // if we can't access the location yet
         if (!location.hasLocationEnabled()) {
@@ -117,12 +123,12 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     }
 
     @Override
-    public void processFinish(String output){
+    public void processFinish(LatLng origen, LatLng destino){
         //Here you will receive the result fired from async class
         //of onPostExecute(result) method.
 
-        Toast.makeText(getApplicationContext(), "Valor de api recibido geolocation " + output,
-                Toast.LENGTH_LONG).show();
+        /*Toast.makeText(getApplicationContext(), "Valor de api recibido geolocation " + output,
+                Toast.LENGTH_LONG).show();*/
 
     }
 
@@ -155,6 +161,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             //intActAlta.putExtra("ID_TAREA", 0);
             // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
             startActivity(intActAlta);
+            //startActivityForResult(intActAlta, ALTA_RUTA);
+
             return true;
         }
 
@@ -165,6 +173,21 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 13));
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if(bundle != null) {
+            Recorrido recorrido =
+                    (Recorrido) bundle.getSerializable("MyClass");
+
+        /*Intent i = getIntent();
+        Recorrido recorrido = (Recorrido) i.getSerializableExtra("sampleObject");*/
+
+            if (recorrido != null) {
+                color = Color.parseColor("#2196F3");
+                requestDirection(recorrido.getOrigen(), recorrido.getDestino(), color);
+            }
+        }
     }
 
     @Override
@@ -265,5 +288,30 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         location.endUpdates();
 
         super.onPause();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == ALTA_RUTA) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+
+                //Bundle bundle = data.getExtras();
+
+                /*Recorrido recorrido=
+                        (Recorrido) data.getSerializable("MyClass");*/
+
+                Recorrido recorrido = (Recorrido) getIntent().getSerializableExtra("MyClass");
+
+                Log.d("Llegamos con recorrido ",recorrido.getNombre_origen());
+                Log.d("Llegamos con recorrido ",recorrido.getNombre_destino());
+
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+
+                // Do something with the contact here (bigger example below)
+            }
+        }
     }
 }

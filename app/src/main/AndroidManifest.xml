@@ -40,7 +40,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AltaRuta"></activity>
+        <activity android:name=".AltaRuta" />
+        <activity
+            android:name=".ListadoRecorridosActivity"
+            android:label="@string/title_activity_listado_recorridos"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

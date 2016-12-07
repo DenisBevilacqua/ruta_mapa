@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -25,10 +26,10 @@ import javax.net.ssl.HttpsURLConnection;
 
 // Tarea asincrónica que permite obtener una ubicacion en latitud y longitud a partir de una cadena de string.
 
-public class GetLatLngFromString extends AsyncTask<String, Void, String[]> {
+public class GetLatLngFromString extends AsyncTask<String, Void, String[]> implements Serializable {
 
     public interface AsyncResponse {
-        void processFinish(String output);
+        void processFinish(LatLng origen, LatLng destino);
     }
 
     public AsyncResponse delegate = null;
@@ -45,14 +46,19 @@ public class GetLatLngFromString extends AsyncTask<String, Void, String[]> {
     // Recibimos una cadena de string y usamos la API de google geolocalization para en segundo plano.
     @Override
     protected String[] doInBackground(String... params) {
+        Log.d("params0 es ",params[0]);
+        Log.d("params1 es ",params[1]);
         String response;
+        String response2;
         try {
-            response = getLatLongByURL("http://maps.google.com/maps/api/geocode/json?address=saavedra2048,lacapital,santafe,argentina&sensor=false");
+            response = getLatLongByURL("http://maps.google.com/maps/api/geocode/json?address="+params[0].replaceAll("\\s","")+"&sensor=false");
+            response2 = getLatLongByURL("http://maps.google.com/maps/api/geocode/json?address="+params[1].replaceAll("\\s","")+"&sensor=false");
             Log.d("response",""+response);
-            return new String[]{response};
+            return new String[]{response,response2};
         } catch (Exception e) {
             return new String[]{"error"};
         }
+
     }
 
     @Override
@@ -71,9 +77,26 @@ public class GetLatLngFromString extends AsyncTask<String, Void, String[]> {
             Log.d("latitude", "" + lat);
             Log.d("longitude", "" + lng);
 
-            LatLng latLng = new LatLng(lat,lng);
+            LatLng origen = new LatLng(lat,lng);
 
-            delegate.processFinish(lat+","+lng);
+            //////////////////////////////
+
+            JSONObject jsonObject2 = new JSONObject(result[1]);
+
+            double lng2 = ((JSONArray)jsonObject2.get("results")).getJSONObject(0)
+                    .getJSONObject("geometry").getJSONObject("location")
+                    .getDouble("lng");
+
+            double lat2 = ((JSONArray)jsonObject2.get("results")).getJSONObject(0)
+                    .getJSONObject("geometry").getJSONObject("location")
+                    .getDouble("lat");
+
+            Log.d("latitude", "" + lat);
+            Log.d("longitude", "" + lng);
+
+            LatLng destino = new LatLng(lat2,lng2);
+
+            delegate.processFinish(origen, destino);
 
         } catch (JSONException e) {
             e.printStackTrace();
