@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,11 +13,12 @@ import android.widget.EditText;
 
 import com.example.denis.mapas.clases.GetLatLngFromString;
 import com.example.denis.mapas.clases.Recorrido;
+import com.example.denis.mapas.dao.ProyectoApiRest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class AltaRuta extends AppCompatActivity implements GetLatLngFromString.AsyncResponse  {
+public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromString.AsyncResponse  {
 
     private Button btn_crear_ruta;
     private EditText origen;
@@ -65,7 +67,6 @@ public class AltaRuta extends AppCompatActivity implements GetLatLngFromString.A
                 asyncTask.execute(recorrido.getNombre_origen(),recorrido.getNombre_destino());
 
 
-
                 // Enviar a main activity los valores.
 
             }
@@ -76,9 +77,18 @@ public class AltaRuta extends AppCompatActivity implements GetLatLngFromString.A
     @Override
     public void processFinish(LatLng origen, LatLng destino) {
 
+        // Debemos guardar los valores en la base de datos
+
+        recorrido.setOrigen_latitud(origen.latitude);
+        recorrido.setOrigen_longitud(origen.longitude);
+        recorrido.setDestino_latitud(destino.latitude);
+        recorrido.setDestino_longitud(destino.longitude);
+
         recorrido.setOrigen(origen);
 
         recorrido.setDestino(destino);
+
+        new GestionarRecorridos(recorrido, 1, null).execute("");
 
         Intent intActAlta= new Intent(context,MapsActivity.class);
 
@@ -110,5 +120,53 @@ public class AltaRuta extends AppCompatActivity implements GetLatLngFromString.A
 
         finish();*/
 
+    }
+
+    private class GestionarRecorridos extends AsyncTask<Object, Object, Integer> {
+        private Recorrido r;
+        private Integer i;   //Valor que indica la operación que se quiere realizar: 1:crear, 2:borrar, 3:actualizar
+        private Integer id;
+        public GestionarRecorridos(Recorrido r, Integer i, Integer id){
+            this.r = r;
+            this.i = i;
+            this.id = id;
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+
+            ProyectoApiRest rest = new ProyectoApiRest();
+
+            switch(i){
+                case 1: {
+                    rest.crearRecorrido(r);
+                break;}
+                /*case 2:{
+                    rest.borrarProyecto(id);
+                }break;*/
+                /*case 3:{
+                    rest.actualizarProyecto(p);
+                }break;*/
+                /*case 4:{
+                    rest.verTareas(p);
+                }break;*/
+            }
+            return 1;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            //new TareaAsincronica().execute();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Object... values) {
+        }
     }
 }
