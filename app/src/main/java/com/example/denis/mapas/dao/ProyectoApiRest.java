@@ -2,8 +2,8 @@ package com.example.denis.mapas.dao;
 
 import android.util.Log;
 
-import com.example.denis.mapas.clases.Recorrido;
-import com.example.denis.mapas.clases.Usuario;
+import com.example.denis.mapas.modelo.Recorrido;
+import com.example.denis.mapas.modelo.Usuario;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -112,25 +112,29 @@ public class ProyectoApiRest {
         return resultado;
     }*/
 
-    public ArrayList<Recorrido> listarProyectos(){
-        ArrayList<Recorrido> listaProyectos = new ArrayList<Recorrido>();
+    public ArrayList<Recorrido> listarRecorridos(){
+        ArrayList<Recorrido> listaRecorridos = new ArrayList<Recorrido>();
         RestClient cliRest = new RestClient();
-        JSONArray array = cliRest.getByAll(null, "proyectos");
+        JSONArray array = cliRest.getByAll(null, "recorridos");
         for(int i=0; i<array.length(); i++){
             try {
                 JSONObject o = array.getJSONObject(i);
                 Recorrido r = new Recorrido();
-                /*r.setOrigen_latitud();
-                r.setId(Integer.parseInt(o.getString("destino")));*/
 
-                listaProyectos.add(r);
+                r.setNombre_destino(o.getString("nombre_destino"));
+                r.setNombre_origen(o.getString("nombre_origen"));
+                r.setOrigen( new LatLng(Double.parseDouble(o.getString("origen_latitud")),Double.parseDouble(o.getString("origen_longitud"))));
+                r.setDestino( new LatLng(Double.parseDouble(o.getString("destino_latitud")),Double.parseDouble(o.getString("destino_longitud"))));
+                r.setEstado(o.getString("estado"));
+
+                listaRecorridos.add(r);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }
-        Log.d("listaProyectosAString: ",listaProyectos.toString());
-        return listaProyectos;
+        Log.d("listaProyectosAString: ",listaRecorridos.toString());
+        return listaRecorridos;
     }
 
     public Recorrido buscarRecorrido(Integer id){

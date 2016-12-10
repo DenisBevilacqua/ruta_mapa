@@ -1,4 +1,4 @@
-package com.example.denis.mapas.clases;
+package com.example.denis.mapas.modelo;
 
 import org.json.JSONException;
 import org.json.JSONObject;

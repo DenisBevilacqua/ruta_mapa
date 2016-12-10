@@ -41,9 +41,9 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".AltaRecorrido" />
+        <activity android:name=".recorridos.AltaRecorrido" />
         <activity
-            android:name=".ListadoRecorridosActivity"
+            android:name=".recorridos.ListadoRecorridosActivity"
             android:label="@string/title_activity_listado_recorridos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

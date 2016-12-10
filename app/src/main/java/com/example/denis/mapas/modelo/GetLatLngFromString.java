@@ -1,11 +1,8 @@
-package com.example.denis.mapas.clases;
+package com.example.denis.mapas.modelo;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.denis.mapas.MapsActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;

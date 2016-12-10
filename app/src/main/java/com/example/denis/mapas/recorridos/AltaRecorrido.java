@@ -1,9 +1,7 @@
-package com.example.denis.mapas;
+package com.example.denis.mapas.recorridos;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,12 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.denis.mapas.clases.GetLatLngFromString;
-import com.example.denis.mapas.clases.Recorrido;
+import com.example.denis.mapas.MapsActivity;
+import com.example.denis.mapas.R;
+import com.example.denis.mapas.modelo.GetLatLngFromString;
+import com.example.denis.mapas.modelo.Recorrido;
 import com.example.denis.mapas.dao.ProyectoApiRest;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromString.AsyncResponse  {
 

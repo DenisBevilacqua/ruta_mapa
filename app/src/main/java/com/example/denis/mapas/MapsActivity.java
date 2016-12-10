@@ -23,8 +23,10 @@ import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.example.denis.mapas.clases.GetLatLngFromString;
-import com.example.denis.mapas.clases.Recorrido;
+import com.example.denis.mapas.modelo.GetLatLngFromString;
+import com.example.denis.mapas.modelo.Recorrido;
+import com.example.denis.mapas.recorridos.AltaRecorrido;
+import com.example.denis.mapas.recorridos.ListadoRecorridosActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -153,6 +155,17 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             //intActAlta.putExtra("ID_TAREA", 0);
             // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
             startActivity(intActAlta);
+            //startActivityForResult(intActAlta, ALTA_RUTA);
+
+            return true;
+        }
+
+        if (id == R.id.listado_recorridos) {
+
+            Intent ListadoRecorridos= new Intent(this,ListadoRecorridosActivity.class);
+            //intActAlta.putExtra("ID_TAREA", 0);
+            // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+            startActivity(ListadoRecorridos);
             //startActivityForResult(intActAlta, ALTA_RUTA);
 
             return true;

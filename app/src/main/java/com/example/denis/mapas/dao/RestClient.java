@@ -2,8 +2,8 @@ package com.example.denis.mapas.dao;
 
 import android.util.Log;
 
-import com.example.denis.mapas.clases.Recorrido;
-import com.example.denis.mapas.clases.Usuario;
+import com.example.denis.mapas.modelo.Recorrido;
+import com.example.denis.mapas.modelo.Usuario;
 
 
 import org.json.JSONArray;

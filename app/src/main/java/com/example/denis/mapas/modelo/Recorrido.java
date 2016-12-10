@@ -1,4 +1,4 @@
-package com.example.denis.mapas.clases;
+package com.example.denis.mapas.modelo;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -16,6 +16,7 @@ public class Recorrido implements Serializable {
     public static LatLng origen;
     public static LatLng destino;
 
+    public static String id;
     public static Double origen_longitud;
     public static Double origen_latitud;
     public static Double destino_latitud;
@@ -28,6 +29,14 @@ public class Recorrido implements Serializable {
 
     public Recorrido(){
 
+    }
+
+    public static String getId() {
+        return id;
+    }
+
+    public static void setId(String id) {
+        Recorrido.id = id;
     }
 
     public LatLng getOrigen() {
@@ -112,6 +121,8 @@ public class Recorrido implements Serializable {
             jsonObject.put("destino_latitud", getDestino_latitud()+"");
             jsonObject.put("origen_longitud", getOrigen_longitud()+"");
             jsonObject.put("destino_longitud", getDestino_longitud()+"");
+            jsonObject.put("nombre_origen", getNombre_origen()+"");
+            jsonObject.put("nombre_destino", getNombre_destino()+"");
             jsonObject.put("estado", 0);
 
             return jsonObject;

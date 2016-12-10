@@ -1,15 +1,9 @@
-package com.example.denis.mapas.clases;
+package com.example.denis.mapas.modelo;
 
-import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.example.denis.mapas.MapsActivity;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,8 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.denis.mapas.R.id.map;
 
 /**
  * Created by denis on 15/11/16.
