@@ -22,6 +22,7 @@ public class Recorrido implements Serializable {
     private transient Double destino_latitud;
     private transient Double destino_longitud;
 
+
     private transient Double distanciaOrigen;
 
     private transient String nombre_origen;
@@ -29,6 +30,13 @@ public class Recorrido implements Serializable {
 
     private String estado;
 
+    public Double getDistanciaOrigen() {
+        return distanciaOrigen;
+    }
+
+    public void setDistanciaOrigen(Double distanciaOrigen) {
+        this.distanciaOrigen = distanciaOrigen;
+    }
 
     public String getEstado() {
         return estado;
@@ -110,18 +118,18 @@ public class Recorrido implements Serializable {
         this.nombre_destino = nombre_destino;
     }
 
-    public JSONObject toJSON(){
+    public JSONObject toJSON() {
 
-        JSONObject jsonObject= new JSONObject();
+        JSONObject jsonObject = new JSONObject();
 
         try {
 
-            jsonObject.put("origen_latitud", getOrigen_latitud()+"");
-            jsonObject.put("destino_latitud", getDestino_latitud()+"");
-            jsonObject.put("origen_longitud", getOrigen_longitud()+"");
-            jsonObject.put("destino_longitud", getDestino_longitud()+"");
-            jsonObject.put("nombre_origen", getNombre_origen()+"");
-            jsonObject.put("nombre_destino", getNombre_destino()+"");
+            jsonObject.put("origen_latitud", getOrigen_latitud() + "");
+            jsonObject.put("destino_latitud", getDestino_latitud() + "");
+            jsonObject.put("origen_longitud", getOrigen_longitud() + "");
+            jsonObject.put("destino_longitud", getDestino_longitud() + "");
+            jsonObject.put("nombre_origen", getNombre_origen() + "");
+            jsonObject.put("nombre_destino", getNombre_destino() + "");
             jsonObject.put("estado", 0);
             jsonObject.put("id", getId());
 

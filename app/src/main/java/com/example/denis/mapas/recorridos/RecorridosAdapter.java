@@ -40,9 +40,9 @@ public class RecorridosAdapter extends ArrayAdapter<Recorrido> {
 
         View row = convertView;
 
-        //if (row == null) {
+        if (row == null) {
             row = inflater.inflate(R.layout.fila_recorrido, parent, false);
-        //}
+        }
 
         TextView origen = (TextView) row.findViewById(R.id.origen_recorrido);
         TextView destino = (TextView) row.findViewById(R.id.destino_recorrido);
@@ -50,7 +50,7 @@ public class RecorridosAdapter extends ArrayAdapter<Recorrido> {
 
         origen.setText(this.getItem(position).getNombre_origen().toString());
         destino.setText(this.getItem(position).getNombre_destino().toString());
-        id.setText(this.getItem(position).getId().toString());
+        id.setText("Ubicación Actual a Origen: "+this.getItem(position).getDistanciaOrigen().toString()+" metros.");
 
         Integer color = Color.parseColor("#2196F3");
 

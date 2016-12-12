@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,11 +33,18 @@ import com.example.denis.mapas.modelo.Recorrido;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+
+import im.delight.android.location.SimpleLocation;
 
 public class ListadoRecorridosActivity extends AppCompatActivity {
 
     private ListView listadoRecorridos;
     private ArrayList<Recorrido> listaRecorridos;
+
+    private LatLng originRoute = new LatLng(-31.635468, -60.701156);
+    private SimpleLocation location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +125,15 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
         protected ArrayList<Recorrido> doInBackground(String... params) {
             ProyectoApiRest rest = new ProyectoApiRest();
             ArrayList<Recorrido> listaRecorridos = rest.listarRecorridos();
+            for(Recorrido r : listaRecorridos){
+                Double distancia = location.calculateDistance(originRoute.latitude, originRoute.longitude, r.getOrigen().latitude, r.getOrigen().longitude);
+                distancia = Math.round( distancia * 100.0 ) / 100.0;
+                r.setDistanciaOrigen(distancia);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                listaRecorridos.sort(new RecorridoComparator());
+            }
 
             return listaRecorridos;
         }
