@@ -47,6 +47,8 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
         registerForContextMenu(listadoRecorridos);
 
+        setTitle("Recorridos disponibles");
+
         // Ejecutamos la tarea asincrónica.
 
         new ListarRecorridos().execute("");

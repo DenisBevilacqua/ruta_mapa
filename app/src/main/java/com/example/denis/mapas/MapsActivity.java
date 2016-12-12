@@ -188,7 +188,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
         /*Intent i = getIntent();
         Recorrido recorrido = (Recorrido) i.getSerializableExtra("sampleObject");*/
-
+        Log.d("Recorrido serial ",recorrido.getOrigen().toString());
             if (recorrido != null) {
                 color = Color.parseColor("#2196F3");
                 requestDirection(recorrido.getOrigen(), recorrido.getDestino(), color);

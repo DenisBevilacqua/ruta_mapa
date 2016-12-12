@@ -128,7 +128,11 @@ public class ProyectoApiRest {
                 r.setEstado(o.getString("estado"));
                 r.setId(o.getString("id"));
                 Log.d("NOMBRE ORIGEN",r.getNombre_origen());
+
+
+
                 listaRecorridos.add(r);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
