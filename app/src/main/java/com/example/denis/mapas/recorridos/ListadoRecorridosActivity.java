@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.denis.mapas.R;
 import com.example.denis.mapas.dao.ProyectoApiRest;
 import com.example.denis.mapas.modelo.Recorrido;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -113,24 +114,20 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
         protected ArrayList<Recorrido> doInBackground(String... params) {
             ProyectoApiRest rest = new ProyectoApiRest();
             ArrayList<Recorrido> listaRecorridos = rest.listarRecorridos();
+
             return listaRecorridos;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Recorrido> result) {
             //listAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, result.get(1));
-
-
             // Seteamos el listado de proyectos a la variable global que mantiene los proyectos traidos de la api rest.
             listaRecorridos = result;
 
             // Traer de api rest el listado de recorridos.
 
-
-             RecorridosAdapter adapter = new RecorridosAdapter(getApplicationContext(), listaRecorridos);
-
-             listadoRecorridos.setAdapter(adapter);
-
+            RecorridosAdapter adapter = new RecorridosAdapter(getApplicationContext(), listaRecorridos);
+            listadoRecorridos.setAdapter(adapter);
         }
 
         @Override
@@ -161,15 +158,20 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.botonVerRecorrido: {
-                //String result=info.;
-
-
-                Log.d("INFO_toString",info.toString());
-                Log.d("ITEM_toString",item.toString());
-                /*Intent returnIntent = new Intent();
-                returnIntent.putExtra("result",result);
+                String result=listaRecorridos.get(info.position).getId();
+                LatLng LatLngO = listaRecorridos.get(info.position).getOrigen();
+                LatLng LatLngD = listaRecorridos.get(info.position).getDestino();
+                Log.d("ID_RECORRIDO", result);
+                Log.d("ID_POSITION", info.position+"");
+                int resultado = Integer.parseInt(result);
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result",resultado);
+                returnIntent.putExtra("LatO",LatLngO.latitude);
+                returnIntent.putExtra("LngO",LatLngO.longitude);
+                returnIntent.putExtra("LatD",LatLngD.latitude);
+                returnIntent.putExtra("LngD",LatLngD.longitude);
                 setResult(Activity.RESULT_OK,returnIntent);
-                finish();*/
+                finish();
             }break;
         }
 

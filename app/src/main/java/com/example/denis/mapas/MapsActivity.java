@@ -55,6 +55,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     private SimpleLocation location;
     GetLatLngFromString asyncTask =new GetLatLngFromString();
     static final int ALTA_RUTA = 1;  // The request code
+    static final int RECORRIDO = 2;  // The request code
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +166,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             Intent ListadoRecorridos= new Intent(this,ListadoRecorridosActivity.class);
             //intActAlta.putExtra("ID_TAREA", 0);
             // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
-            startActivity(ListadoRecorridos);
+            startActivityForResult(ListadoRecorridos, RECORRIDO);
             //startActivityForResult(intActAlta, ALTA_RUTA);
 
             return true;
@@ -316,6 +317,26 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                 // The Intent's data Uri identifies which contact was selected.
 
                 // Do something with the contact here (bigger example below)
+            }
+        }
+        if (requestCode == RECORRIDO) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Integer id = getIntent().getIntExtra("result", -1);
+                if(id == -1){
+                    Log.d("ERROR","No se seleccionó un recorrido");
+                    Double latO = getIntent().getDoubleExtra("LatO",-1.0);
+                    Log.d("ERROR",""+latO);
+                }else{
+                    Log.d("ID_RECORRIDO SELECCIONDO",""+ id);
+                    Double latO = getIntent().getDoubleExtra("LatO",-1.0);
+                    Double lngO = getIntent().getDoubleExtra("LngO",-1.0);
+                    Double latD = getIntent().getDoubleExtra("LatD",-1.0);
+                    Double lngD = getIntent().getDoubleExtra("LngD",-1.0);
+
+                    color = Color.parseColor("#2196F3");
+                    requestDirection(new LatLng(latO,lngO), new LatLng(latD,lngD) , color);
+                }
             }
         }
     }
