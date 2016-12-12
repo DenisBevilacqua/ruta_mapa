@@ -8,12 +8,24 @@
         android:text="Id: "
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/origen_recorrido"
+        android:id="@+id/id_recorrido"
         android:layout_marginTop="10dp"
         android:paddingLeft="10dp" />
 
     <TextView
         android:text="Nombre: "
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/origen_recorrido"
+        android:layout_marginTop="10dp"
+        android:elevation="10dp"
+        android:translationZ="2dp"
+        android:textSize="22sp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="3dp" />
+
+    <TextView
+        android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/destino_recorrido"
@@ -22,6 +34,6 @@
         android:translationZ="2dp"
         android:textSize="22sp"
         android:paddingLeft="10dp"
-        android:paddingBottom="3dp" />
+        android:paddingBottom="3dp" />/>
 
 </LinearLayout>

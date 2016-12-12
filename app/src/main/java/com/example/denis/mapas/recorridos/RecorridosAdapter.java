@@ -29,8 +29,8 @@ public class RecorridosAdapter extends ArrayAdapter<Recorrido> {
 
     private LayoutInflater inflater;
 
-    public RecorridosAdapter(Context context, List<Recorrido> proyectos) {
-        super(context, R.layout.fila_recorrido, proyectos);
+    public RecorridosAdapter(Context context, List<Recorrido> recorridos) {
+        super(context, R.layout.fila_recorrido, recorridos);
         inflater = LayoutInflater.from(context);
     }
 
@@ -40,33 +40,31 @@ public class RecorridosAdapter extends ArrayAdapter<Recorrido> {
 
         View row = convertView;
 
-        if (row == null) row = inflater.inflate(R.layout.fila_recorrido, parent, false);
+        //if (row == null) {
+            row = inflater.inflate(R.layout.fila_recorrido, parent, false);
+        //}
 
-        TextView nombre = (TextView) row.findViewById(R.id.origen_recorrido);
+        TextView origen = (TextView) row.findViewById(R.id.origen_recorrido);
+        TextView destino = (TextView) row.findViewById(R.id.destino_recorrido);
+        TextView id = (TextView) row.findViewById(R.id.id_recorrido);
 
-        TextView id = (TextView) row.findViewById(R.id.destino_recorrido);
-
-        nombre.setText(this.getItem(position).getNombre_origen().toString());
-
-        id.setText(this.getItem(position).getNombre_destino().toString());
+        origen.setText(this.getItem(position).getNombre_origen().toString());
+        destino.setText(this.getItem(position).getNombre_destino().toString());
+        id.setText(this.getItem(position).getId().toString());
 
         Integer color = Color.parseColor("#2196F3");
 
-        nombre.setTextColor(color);
-
+        origen.setTextColor(color);
+        destino.setTextColor(color);
         id.setTextColor(color);
 
-        SpannableString spanString = new SpannableString(nombre.getText().toString());
-
+        SpannableString spanString = new SpannableString(origen.getText().toString());
         spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
+        origen.setText(spanString);
 
-        nombre.setText(spanString);
-
-        SpannableString spanString1 = new SpannableString(id.getText().toString());
-
+        SpannableString spanString1 = new SpannableString(destino.getText().toString());
         spanString1.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString1.length(), 0);
-
-        id.setText(spanString1);
+        destino.setText(spanString1);
 
         return row;
     }

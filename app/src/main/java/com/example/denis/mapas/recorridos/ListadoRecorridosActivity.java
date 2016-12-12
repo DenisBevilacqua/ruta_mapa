@@ -1,20 +1,29 @@
 package com.example.denis.mapas.recorridos;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.denis.mapas.R;
 import com.example.denis.mapas.dao.ProyectoApiRest;
@@ -34,6 +43,8 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         listadoRecorridos = (ListView) findViewById(R.id.listadoRecorridos);
+
+        registerForContextMenu(listadoRecorridos);
 
         // Ejecutamos la tarea asincrónica.
 
@@ -115,6 +126,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
             // Traer de api rest el listado de recorridos.
 
+
              RecorridosAdapter adapter = new RecorridosAdapter(getApplicationContext(), listaRecorridos);
 
              listadoRecorridos.setAdapter(adapter);
@@ -128,6 +140,40 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(Void... values) {
         }
+    }
+
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+
+        inflater.inflate(R.menu.menu_gestionar_recorridos,menu);
+
+    }
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case R.id.botonVerRecorrido: {
+                //String result=info.;
+
+
+                Log.d("INFO_toString",info.toString());
+                Log.d("ITEM_toString",item.toString());
+                /*Intent returnIntent = new Intent();
+                returnIntent.putExtra("result",result);
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();*/
+            }break;
+        }
+
+        return true;
     }
 
 }

@@ -86,7 +86,8 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
 
         recorrido.setDestino(destino);
 
-        new GestionarRecorridos(recorrido, 1, null).execute("");
+        new GetMaxId().execute();
+        //new GestionarRecorridos(recorrido, 1, null).execute("");
 
         Intent intActAlta= new Intent(context,MapsActivity.class);
 
@@ -167,4 +168,41 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
         protected void onProgressUpdate(Object... values) {
         }
     }
+
+
+    private class GetMaxId extends AsyncTask<Object, Object, Integer> {
+
+        public GetMaxId(){
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+
+            Integer valor=100;
+            ProyectoApiRest rest = new ProyectoApiRest();
+
+            try {
+                valor = rest.getMaxId();
+            } catch (Exception e){
+            }
+            return valor;
+
+        }
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            recorrido.setId(result.toString());
+
+            new GestionarRecorridos(recorrido, 1, null).execute("");
+
+        }
+        @Override
+        protected void onPreExecute() {
+        }
+        @Override
+        protected void onProgressUpdate(Object... values) {
+        }
+    }
+
+
 }

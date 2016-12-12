@@ -37,7 +37,7 @@ public class ProyectoApiRest {
 
         // Crear Object json a partir de p.
 
-        JSONArray j = cliRest.getByAll(null,"proyectos");
+        JSONArray j = cliRest.getByAll(null,"recorridos");
 
         Integer maxId = 0;
 
@@ -126,14 +126,15 @@ public class ProyectoApiRest {
                 r.setOrigen( new LatLng(Double.parseDouble(o.getString("origen_latitud")),Double.parseDouble(o.getString("origen_longitud"))));
                 r.setDestino( new LatLng(Double.parseDouble(o.getString("destino_latitud")),Double.parseDouble(o.getString("destino_longitud"))));
                 r.setEstado(o.getString("estado"));
-
+                r.setId(o.getString("id"));
+                Log.d("NOMBRE ORIGEN",r.getNombre_origen());
                 listaRecorridos.add(r);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }
-        Log.d("listaProyectosAString: ",listaRecorridos.toString());
+
         return listaRecorridos;
     }
 

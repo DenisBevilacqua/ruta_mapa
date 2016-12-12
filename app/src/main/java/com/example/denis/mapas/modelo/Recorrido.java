@@ -124,6 +124,7 @@ public class Recorrido implements Serializable {
             jsonObject.put("nombre_origen", getNombre_origen()+"");
             jsonObject.put("nombre_destino", getNombre_destino()+"");
             jsonObject.put("estado", 0);
+            jsonObject.put("id", getId());
 
             return jsonObject;
 
