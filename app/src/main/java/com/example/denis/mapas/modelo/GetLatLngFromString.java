@@ -43,6 +43,8 @@ public class GetLatLngFromString extends AsyncTask<String, Void, String[]> imple
     // Recibimos una cadena de string y usamos la API de google geolocalization para en segundo plano.
     @Override
     protected String[] doInBackground(String... params) {
+
+
         Log.d("params0 es ",params[0]);
         Log.d("params1 es ",params[1]);
         String response;
@@ -55,6 +57,7 @@ public class GetLatLngFromString extends AsyncTask<String, Void, String[]> imple
         } catch (Exception e) {
             return new String[]{"error"};
         }
+
 
     }
 

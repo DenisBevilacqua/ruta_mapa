@@ -86,14 +86,10 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
 
         recorrido.setDestino(destino);
 
-        new GetMaxId().execute();
-        //new GestionarRecorridos(recorrido, 1, null).execute("");
+        //new GetMaxId().execute();
+        new GestionarRecorridos(recorrido, 1, null).execute("");
 
-        Intent intActAlta= new Intent(context,MapsActivity.class);
-
-        /*intActAlta.putExtra("MyClass", recorrido);
-
-        startActivity(intActAlta);*/
+        /*Intent intActAlta= new Intent(context,MapsActivity.class);
 
         Bundle bundle = new Bundle();
 
@@ -101,23 +97,13 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
 
         intActAlta.putExtras(bundle);
 
+        startActivity(intActAlta);*/
+
+        Intent intActAlta= new Intent(context,ListadoRecorridosActivity.class);
+
         startActivity(intActAlta);
 
-        /*Intent resultIntent = new Intent();
-
-        // TODO Add extras or a data URI to this intent as appropriate.
-
-        resultIntent.putExtra("MyClass", recorrido);
-
-        // To retrieve object in second Activity
-
-        getIntent().getSerializableExtra("MyClass");
-
-        setResult(Activity.RESULT_OK, resultIntent);
-
-        //finish();
-
-        finish();*/
+        //((AltaRecorrido)getApplicationContext()).finish();
 
     }
 
