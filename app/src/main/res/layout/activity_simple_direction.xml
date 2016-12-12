@@ -41,7 +41,19 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="53dp"
         android:elevation="10dp"
-        android:layout_width="wrap_content" />
+        android:layout_width="wrap_content"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/btn_origen"
+        android:layout_height="wrap_content"
+        android:text="Llegué a Origen"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="53dp"
+        android:elevation="10dp"
+        android:layout_width="wrap_content"
+        android:visibility="invisible" />
 
     <Button
         android:text="Mi ubicación"
@@ -52,6 +64,7 @@
         android:layout_weight="0.33"
         android:elevation="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/btn_request_direction" />
+        android:layout_toStartOf="@+id/btn_request_direction"
+        android:visibility="invisible" />
 
 </RelativeLayout>

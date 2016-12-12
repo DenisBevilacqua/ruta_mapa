@@ -31,6 +31,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.denis.mapas.recorridos.ListadoRecorridosActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -342,7 +344,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // Si se ha logueado correctamente debems ingresar.
                 // Vamos a la pantalla principal.
 
-                Intent pantallaPricipalIntent= new Intent(context,MapsActivity.class);
+                Intent pantallaPricipalIntent= new Intent(context,ListadoRecorridosActivity.class);
                 startActivity(pantallaPricipalIntent);
 
 

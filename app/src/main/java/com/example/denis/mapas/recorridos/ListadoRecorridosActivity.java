@@ -192,6 +192,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
                 returnIntent.putExtra("LngO",LatLngO.longitude);
                 returnIntent.putExtra("LatD",LatLngD.latitude);
                 returnIntent.putExtra("LngD",LatLngD.longitude);
+                returnIntent.putExtra("id",result);
 
                 startActivity(returnIntent);
                 //setResult(Activity.RESULT_OK,returnIntent);

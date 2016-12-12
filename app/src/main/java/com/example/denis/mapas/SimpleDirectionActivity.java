@@ -39,8 +39,8 @@ public class SimpleDirectionActivity extends AppCompatActivity implements OnMapR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_direction);
 
-        btnRequestDirection = (Button) findViewById(R.id.btn_request_direction);
-        btnRequestDirection.setOnClickListener(this);
+       // btnRequestDirection = (Button) findViewById(R.id.btn_request_direction);
+        // btnRequestDirection.setOnClickListener(this);
 
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
     }
@@ -54,9 +54,9 @@ public class SimpleDirectionActivity extends AppCompatActivity implements OnMapR
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_request_direction) {
+        /*if (id == R.id.btn_request_direction) {
             requestDirection();
-        }
+        }*/
     }
 
     public void requestDirection() {

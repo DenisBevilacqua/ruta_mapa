@@ -84,10 +84,10 @@ public class ProyectoApiRest {
 
     }
 
-    public void actualizarProyecto(Recorrido r) {
+    public void actualizarEstadoRecorrido(String id, String estado) {
 
         RestClient cliRest = new RestClient();
-        cliRest.actualizar(r, "recorridos");
+        cliRest.actualizarEstado(id, estado , "recorridos");
 
     }
 
@@ -144,7 +144,7 @@ public class ProyectoApiRest {
 
     public Recorrido buscarRecorrido(Integer id) {
         RestClient cliRest = new RestClient();
-        JSONObject t = cliRest.getById(1, "proyectos");
+        JSONObject t = cliRest.getById("1", "proyectos");
         // transformar el objeto JSON a proyecto y retornarlo
 
         Recorrido p = new Recorrido();

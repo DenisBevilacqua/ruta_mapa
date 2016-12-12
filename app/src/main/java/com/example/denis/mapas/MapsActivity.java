@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -23,6 +24,7 @@ import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.example.denis.mapas.dao.ProyectoApiRest;
 import com.example.denis.mapas.modelo.GetLatLngFromString;
 import com.example.denis.mapas.modelo.Recorrido;
 import com.example.denis.mapas.recorridos.AltaRecorrido;
@@ -40,6 +42,7 @@ import im.delight.android.location.SimpleLocation;
 
 public class MapsActivity extends AppCompatActivity implements GetLatLngFromString.AsyncResponse, OnMapReadyCallback, View.OnClickListener, DirectionCallback {
     private Button btnRequestDirection;
+    private Button btn_origen;
     private GoogleMap googleMap;
     private String serverKey = "AIzaSyAkVcdTXj47qfUPWnDKNK_d2luTpcx1PmM";
     private LatLng camera = new LatLng(-31.635468, -60.701156);
@@ -49,7 +52,9 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     private LatLng origenActual;
     private LatLng destinoActual;
     private Integer color;
+    private String id;
     static public Context contexto;
+    private Boolean mostrarMiUbicacion = false;
 
     private boolean mostrandoMapa = false;
     private SimpleLocation location;
@@ -75,8 +80,9 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         //execute the async task
         //asyncTask.execute();
 
+        btn_origen = (Button) findViewById(R.id.btn_origen);
         btnRequestDirection = (Button) findViewById(R.id.btn_request_direction);
-        btnRequestDirection.setOnClickListener(this);
+        btn_origen.setOnClickListener(this);
 
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
 
@@ -92,7 +98,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             SimpleLocation.openSettings(this);
         }
 
-        findViewById(R.id.botonUbicacionActual).setOnClickListener(new View.OnClickListener() {
+        /*findViewById(R.id.botonUbicacionActual).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -113,7 +119,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
             }
 
-        });
+        });*/
 
     }
 
@@ -206,6 +212,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             Double lngO = intent.getDoubleExtra("LngO",-1.0);
             Double latD = intent.getDoubleExtra("LatD",-1.0);
             Double lngD = intent.getDoubleExtra("LngD",-1.0);
+            id = intent.getStringExtra("id");
 
             Log.d("lat",""+ latO);
 
@@ -215,6 +222,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
             requestDirection(new LatLng(latO,lngO), new LatLng(latD,lngD) , color);
 
+            btn_origen.setVisibility(View.VISIBLE);
+
         }
 
     }
@@ -222,7 +231,25 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_request_direction) {
+
+
+        if (id == R.id.btn_origen) {
+
+            // llamar a metodo para cambiar el estado.
+
+            // enviar id y estado a actualizar.
+
+            Recorrido r = new Recorrido();
+
+            r.setId(this.id);
+
+            r.setEstado("1");
+
+            new GestionarRecorridos(r, 2, null).execute("");
+
+
+        }
+       /* if (id == R.id.btn_request_direction) {
             if (mostrandoMapa == false) {
                 color = Color.parseColor("#2196F3");
                 requestDirection(originRoute, destinationRoute, color);
@@ -234,7 +261,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                 mostrandoMapa = false;
 
             }
-        }
+        }*/
     }
 
     // Funcion que utiliza la libreria requestDirection que utiliza la API Google Directions.
@@ -254,12 +281,12 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     // Luego de requerir la ruta utilizando requestDirection, si sale bien entramos a esta función.
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
-        Snackbar.make(btnRequestDirection, "Se ha realizado la operación con el siguiente estado: " + direction.getStatus(), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(btn_origen, "Se ha realizado la operación con el siguiente estado: " + direction.getStatus(), Snackbar.LENGTH_LONG).show();
         if (direction.isOK()) {
 
             mostrandoMapa = true;
-            btnRequestDirection.setText("Limpiar mapa");
-            btnRequestDirection.setVisibility(View.VISIBLE);
+            //btnRequestDirection.setText("Limpiar mapa");
+            //btnRequestDirection.setVisibility(View.VISIBLE);
             googleMap.addMarker(new MarkerOptions().position(origenActual).title("Origen"));
             googleMap.addMarker(new MarkerOptions().position(destinoActual).title("Destino"));
 
@@ -275,7 +302,27 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             Toast.makeText(getApplicationContext(), "La distancia entre origen y destino es de: " + distancia + " metros",
                     Toast.LENGTH_LONG).show();
 
+            if (mostrarMiUbicacion == false)
+            {
+                location.beginUpdates();
+
+                final double latitude = location.getLatitude();
+                final double longitude = location.getLongitude();
+                miUbicacion = new LatLng(latitude,longitude);
+
+                googleMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicación"));
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 14));
+
+                color = Color.parseColor("#DF7401");
+
+                requestDirection(miUbicacion, originRoute, color);
+
+                mostrarMiUbicacion = true;
+            }
+
         }
+
     }
 
     @Override
@@ -358,6 +405,49 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                     requestDirection(new LatLng(latO,lngO), new LatLng(latD,lngD) , color);
 
             }
+        }
+    }
+
+    private class GestionarRecorridos extends AsyncTask<Object, Object, Integer> {
+        private Recorrido r;
+        private Integer i;   //Valor que indica la operación que se quiere realizar: 1:crear, 2:borrar, 3:actualizar
+        private Integer id;
+        public GestionarRecorridos(Recorrido r, Integer i, Integer id){
+            this.r = r;
+            this.i = i;
+            this.id = id;
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+
+            ProyectoApiRest rest = new ProyectoApiRest();
+
+            switch(i){
+                case 1: {
+                    rest.crearRecorrido(r);
+                    break;}
+                case 2:{
+                    // Cambiar estado
+                    rest.actualizarEstadoRecorrido(r.getId(),r.getEstado());
+                }break;
+            }
+            return 1;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            //new TareaAsincronica().execute();
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Object... values) {
         }
     }
 }
