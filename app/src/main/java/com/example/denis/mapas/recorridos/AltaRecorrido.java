@@ -24,6 +24,7 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
 
     private Recorrido recorrido;
     private Context context;
+    private GetLatLngFromString.AsyncResponse asyncResponse;
 
     GetLatLngFromString asyncTask =new GetLatLngFromString();
 
@@ -43,6 +44,7 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
         origen = (EditText) findViewById(R.id.origen);
         destino = (EditText) findViewById(R.id.destino);
 
+        asyncResponse = this;
         asyncTask.delegate = this;
 
         // Listener en clase anonima. Se ejecuta cuando presionamos el botón "Crear ruta".
@@ -62,6 +64,11 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
                 recorrido.setNombre_destino(destinoString);
 
                 //execute the async task
+
+                asyncTask = new GetLatLngFromString();
+
+                asyncTask.delegate = asyncResponse;
+
                 asyncTask.execute(recorrido.getNombre_origen(),recorrido.getNombre_destino());
 
 

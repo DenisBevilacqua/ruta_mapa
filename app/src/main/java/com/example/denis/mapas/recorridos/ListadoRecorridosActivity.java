@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.denis.mapas.MapsActivity;
 import com.example.denis.mapas.R;
 import com.example.denis.mapas.dao.ProyectoApiRest;
 import com.example.denis.mapas.modelo.Recorrido;
@@ -165,14 +166,19 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
                 LatLng LatLngD = listaRecorridos.get(info.position).getDestino();
                 Log.d("ID_RECORRIDO", result);
                 Log.d("ID_POSITION", info.position+"");
-                int resultado = Integer.parseInt(result);
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("result",resultado);
+                //int resultado = Integer.parseInt(result);
+
+                Intent returnIntent = new Intent(getApplicationContext(),MapsActivity.class);
+
+                returnIntent.putExtra("activity",0);
                 returnIntent.putExtra("LatO",LatLngO.latitude);
                 returnIntent.putExtra("LngO",LatLngO.longitude);
                 returnIntent.putExtra("LatD",LatLngD.latitude);
                 returnIntent.putExtra("LngD",LatLngD.longitude);
-                setResult(Activity.RESULT_OK,returnIntent);
+
+                startActivity(returnIntent);
+                //setResult(Activity.RESULT_OK,returnIntent);
+
                 finish();
             }break;
         }

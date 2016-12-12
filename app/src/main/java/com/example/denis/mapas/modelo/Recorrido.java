@@ -22,6 +22,8 @@ public class Recorrido implements Serializable {
     private transient Double destino_latitud;
     private transient Double destino_longitud;
 
+    private transient Double distanciaOrigen;
+
     private transient String nombre_origen;
     private transient String nombre_destino;
 

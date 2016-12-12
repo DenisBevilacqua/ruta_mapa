@@ -169,6 +169,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             startActivityForResult(ListadoRecorridos, RECORRIDO);
             //startActivityForResult(intActAlta, ALTA_RUTA);
 
+            finish();
+
             return true;
         }
 
@@ -180,20 +182,41 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         this.googleMap = googleMap;
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 13));
 
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if(bundle != null) {
             Recorrido recorrido =
                     (Recorrido) bundle.getSerializable("MyClass");
 
-        /*Intent i = getIntent();
-        Recorrido recorrido = (Recorrido) i.getSerializableExtra("sampleObject");*/
         Log.d("Recorrido serial ",recorrido.getOrigen().toString());
             if (recorrido != null) {
                 color = Color.parseColor("#2196F3");
                 requestDirection(recorrido.getOrigen(), recorrido.getDestino(), color);
             }
+        }*/
+
+        Intent intent = getIntent();
+
+        Integer activity = intent.getIntExtra("activity",-1);
+
+        if (activity==0)
+        {
+
+            Double latO = intent.getDoubleExtra("LatO",-1.0);
+            Double lngO = intent.getDoubleExtra("LngO",-1.0);
+            Double latD = intent.getDoubleExtra("LatD",-1.0);
+            Double lngD = intent.getDoubleExtra("LngD",-1.0);
+
+            Log.d("lat",""+ latO);
+
+            color = Color.parseColor("#2196F3");
+
+            originRoute = new LatLng(latO,lngO);
+
+            requestDirection(new LatLng(latO,lngO), new LatLng(latD,lngD) , color);
+
         }
+
     }
 
     @Override
@@ -322,21 +345,18 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         if (requestCode == RECORRIDO) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                Integer id = getIntent().getIntExtra("result", -1);
-                if(id == -1){
-                    Log.d("ERROR","No se seleccionó un recorrido");
-                    Double latO = getIntent().getDoubleExtra("LatO",-1.0);
-                    Log.d("ERROR",""+latO);
-                }else{
-                    Log.d("ID_RECORRIDO SELECCIONDO",""+ id);
-                    Double latO = getIntent().getDoubleExtra("LatO",-1.0);
-                    Double lngO = getIntent().getDoubleExtra("LngO",-1.0);
-                    Double latD = getIntent().getDoubleExtra("LatD",-1.0);
-                    Double lngD = getIntent().getDoubleExtra("LngD",-1.0);
+
+                    //Log.d("ID_RECORRIDO SELECCIONDO",""+ id);
+                    Double latO = data.getDoubleExtra("LatO",-1.0);
+                    Double lngO = data.getDoubleExtra("LngO",-1.0);
+                    Double latD = data.getDoubleExtra("LatD",-1.0);
+                    Double lngD = data.getDoubleExtra("LngD",-1.0);
+
+                    Log.d("lat",""+ latO);
 
                     color = Color.parseColor("#2196F3");
                     requestDirection(new LatLng(latO,lngO), new LatLng(latD,lngD) , color);
-                }
+
             }
         }
     }

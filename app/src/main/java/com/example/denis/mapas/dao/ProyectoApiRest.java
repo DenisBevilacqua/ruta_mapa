@@ -17,18 +17,19 @@ import java.util.ArrayList;
  */
 public class ProyectoApiRest {
 
-    public void crearRecorrido(Recorrido r){
+    public void crearRecorrido(Recorrido r) {
 
         RestClient cliRest = new RestClient();
 
         // Crear Object json a partir de r.
 
-        cliRest.crearRecorrido(r,"recorridos");
+        cliRest.crearRecorrido(r, "recorridos");
 
     }
-    public void borrarRecorrido(Integer id){
+
+    public void borrarRecorrido(Integer id) {
         RestClient cliRest = new RestClient();
-        cliRest.borrar(id,"recorridos");
+        cliRest.borrar(id, "recorridos");
     }
 
     public Integer getMaxId() throws JSONException {
@@ -37,23 +38,23 @@ public class ProyectoApiRest {
 
         // Crear Object json a partir de p.
 
-        JSONArray j = cliRest.getByAll(null,"recorridos");
+        JSONArray j = cliRest.getByAll(null, "recorridos");
 
         Integer maxId = 0;
 
-        for (int i=0; i<j.length(); i++) {
+        for (int i = 0; i < j.length(); i++) {
             JSONObject actor = j.getJSONObject(i);
             String name = actor.getString("id");
 
             Integer val = Integer.parseInt(name);
-            if (val>maxId)
+            if (val > maxId)
                 maxId = val;
 
             //Log.d("nooooombre ", name );
             //allNames.add(name);
         }
 
-        return maxId +1;
+        return maxId + 1;
 
     }
 
@@ -63,30 +64,30 @@ public class ProyectoApiRest {
 
         // Crear Object json a partir de p.
 
-        JSONArray j = cliRest.getByAll(null,"usuarios");
+        JSONArray j = cliRest.getByAll(null, "usuarios");
 
         Integer maxId = 0;
 
-        for (int i=0; i<j.length(); i++) {
+        for (int i = 0; i < j.length(); i++) {
             JSONObject actor = j.getJSONObject(i);
             String name = actor.getString("id");
 
             Integer val = Integer.parseInt(name);
-            if (val>maxId)
+            if (val > maxId)
                 maxId = val;
 
             //Log.d("nooooombre ", name );
             //allNames.add(name);
         }
 
-        return maxId +1;
+        return maxId + 1;
 
     }
 
-    public void actualizarProyecto(Recorrido r){
+    public void actualizarProyecto(Recorrido r) {
 
         RestClient cliRest = new RestClient();
-        cliRest.actualizar(r,"recorridos");
+        cliRest.actualizar(r, "recorridos");
 
     }
 
@@ -112,26 +113,25 @@ public class ProyectoApiRest {
         return resultado;
     }*/
 
-    public ArrayList<Recorrido> listarRecorridos(){
+    public ArrayList<Recorrido> listarRecorridos() {
         ArrayList<Recorrido> listaRecorridos = new ArrayList<Recorrido>();
         RestClient cliRest = new RestClient();
         JSONArray array = cliRest.getByAll(null, "recorridos");
-        for(int i=0; i<array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             try {
                 JSONObject o = array.getJSONObject(i);
                 Recorrido r = new Recorrido();
 
                 r.setNombre_destino(o.getString("nombre_destino"));
                 r.setNombre_origen(o.getString("nombre_origen"));
-                r.setOrigen( new LatLng(Double.parseDouble(o.getString("origen_latitud")),Double.parseDouble(o.getString("origen_longitud"))));
-                r.setDestino( new LatLng(Double.parseDouble(o.getString("destino_latitud")),Double.parseDouble(o.getString("destino_longitud"))));
+                r.setOrigen(new LatLng(Double.parseDouble(o.getString("origen_latitud")), Double.parseDouble(o.getString("origen_longitud"))));
+                r.setDestino(new LatLng(Double.parseDouble(o.getString("destino_latitud")), Double.parseDouble(o.getString("destino_longitud"))));
                 r.setEstado(o.getString("estado"));
                 r.setId(o.getString("id"));
-                Log.d("NOMBRE ORIGEN",r.getNombre_origen());
+                Log.d("NOMBRE ORIGEN", r.getNombre_origen());
 
+                if (r.getEstado() == "0") listaRecorridos.add(r);
 
-
-                listaRecorridos.add(r);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -142,22 +142,22 @@ public class ProyectoApiRest {
         return listaRecorridos;
     }
 
-    public Recorrido buscarRecorrido(Integer id){
+    public Recorrido buscarRecorrido(Integer id) {
         RestClient cliRest = new RestClient();
-        JSONObject t = cliRest.getById(1,"proyectos");
+        JSONObject t = cliRest.getById(1, "proyectos");
         // transformar el objeto JSON a proyecto y retornarlo
 
-        Recorrido p= new Recorrido();
-       // try {
+        Recorrido p = new Recorrido();
+        // try {
             /*Integer idS = t.getInt("id");
             p.setId(idS);*/
 
             /*String nombre = t.getString("nombre");
             p.setNombre(nombre);*/
 
-       // } catch (JSONException e) {
-       //     e.printStackTrace();
-       // }
+        // } catch (JSONException e) {
+        //     e.printStackTrace();
+        // }
         return p;
     }
 
@@ -168,13 +168,13 @@ public class ProyectoApiRest {
     }
 
     public Integer existeUsuario(String nombre_usuario) {
-        Integer idResultado=0;
+        Integer idResultado = 0;
         RestClient cliRest = new RestClient();
-        JSONArray jsonArray = cliRest.getByAll(null,"usuarios?nombre="+nombre_usuario);
-        if (jsonArray.length()>0){
+        JSONArray jsonArray = cliRest.getByAll(null, "usuarios?nombre=" + nombre_usuario);
+        if (jsonArray.length() > 0) {
             try {
                 JSONObject o = jsonArray.getJSONObject(0);
-                idResultado= o.getInt("id");
+                idResultado = o.getInt("id");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -184,6 +184,6 @@ public class ProyectoApiRest {
 
     public void crearUsuario(Usuario u) {
         RestClient cliRest = new RestClient();
-        cliRest.crearUsuario(u,"usuarios");
+        cliRest.crearUsuario(u, "usuarios");
     }
 }
