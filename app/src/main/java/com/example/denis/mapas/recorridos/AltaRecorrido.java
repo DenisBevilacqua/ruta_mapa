@@ -80,7 +80,7 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
     }
 
     @Override
-    public void processFinish(LatLng origen, LatLng destino) {
+    public void processFinish(LatLng origen, LatLng destino, String name1, String name2) {
 
         // Debemos guardar los valores en la base de datos
 
@@ -88,6 +88,9 @@ public class AltaRecorrido extends AppCompatActivity implements GetLatLngFromStr
         recorrido.setOrigen_longitud(origen.longitude);
         recorrido.setDestino_latitud(destino.latitude);
         recorrido.setDestino_longitud(destino.longitude);
+
+        recorrido.setNombre_origen(name1);
+        recorrido.setNombre_destino(name2);
 
         recorrido.setOrigen(origen);
 

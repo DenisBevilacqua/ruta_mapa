@@ -23,10 +23,10 @@ import javax.net.ssl.HttpsURLConnection;
 
 // Tarea asincrónica que permite obtener una ubicacion en latitud y longitud a partir de una cadena de string.
 
-public class GetLatLngFromString extends AsyncTask<String, Void, String[]> implements Serializable {
+public class GetStringFromLatLng extends AsyncTask<String, Void, String[]> implements Serializable {
 
     public interface AsyncResponse {
-        void processFinish(LatLng origen, LatLng destino,String name1, String name2);
+        void processFinish(LatLng origen, LatLng destino);
     }
 
     public AsyncResponse delegate = null;
@@ -44,14 +44,11 @@ public class GetLatLngFromString extends AsyncTask<String, Void, String[]> imple
     @Override
     protected String[] doInBackground(String... params) {
 
-
-        Log.d("params0 es ",params[0]);
-        Log.d("params1 es ",params[1]);
         String response;
         String response2;
         try {
-            response = getLatLongByURL("http://maps.google.com/maps/api/geocode/json?address="+params[0].replaceAll("\\s","")+"&sensor=false");
-            response2 = getLatLongByURL("http://maps.google.com/maps/api/geocode/json?address="+params[1].replaceAll("\\s","")+"&sensor=false");
+            response = getLatLongByURL("https://maps.googleapis.com/maps/api/geocode/json?latlng="+params[0]+","+params[1]);
+            response2 = getLatLongByURL("https://maps.googleapis.com/maps/api/geocode/json?latlng="+params[2]+","+params[3]);
             Log.d("response",""+response);
             return new String[]{response,response2};
         } catch (Exception e) {
@@ -67,11 +64,8 @@ public class GetLatLngFromString extends AsyncTask<String, Void, String[]> imple
             JSONObject jsonObject = new JSONObject(result[0]);
 
             double lng = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
+                    .getJSONObject("address_components").getJSONObject("location")
                     .getDouble("lng");
-
-            String name1 = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
-                    .getString("formatted_address");
 
             double lat = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
@@ -90,11 +84,6 @@ public class GetLatLngFromString extends AsyncTask<String, Void, String[]> imple
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lng");
 
-            String name2 = ((JSONArray)jsonObject2.get("results")).getJSONObject(0)
-                    .getString("formatted_address");
-
-            //Log.d("Nombre original ", name1);
-
             double lat2 = ((JSONArray)jsonObject2.get("results")).getJSONObject(0)
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lat");
@@ -104,9 +93,7 @@ public class GetLatLngFromString extends AsyncTask<String, Void, String[]> imple
 
             LatLng destino = new LatLng(lat2,lng2);
 
-
-
-            delegate.processFinish(origen, destino, name1, name2);
+            delegate.processFinish(origen, destino);
 
         } catch (JSONException e) {
             e.printStackTrace();

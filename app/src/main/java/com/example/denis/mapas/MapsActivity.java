@@ -124,7 +124,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     }
 
     @Override
-    public void processFinish(LatLng origen, LatLng destino){
+    public void processFinish(LatLng origen, LatLng destino, String name1, String name2){
         //Here you will receive the result fired from async class
         //of onPostExecute(result) method.
 
