@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.Language;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.util.DirectionConverter;
@@ -43,6 +44,7 @@ import im.delight.android.location.SimpleLocation;
 public class MapsActivity extends AppCompatActivity implements GetLatLngFromString.AsyncResponse, OnMapReadyCallback, View.OnClickListener, DirectionCallback {
     private Button btnRequestDirection;
     private Button btn_origen;
+    private Button btn_destino;
     private GoogleMap googleMap;
     private String serverKey = "AIzaSyAkVcdTXj47qfUPWnDKNK_d2luTpcx1PmM";
     private LatLng camera = new LatLng(-31.635468, -60.701156);
@@ -81,8 +83,10 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         //asyncTask.execute();
 
         btn_origen = (Button) findViewById(R.id.btn_origen);
+        btn_destino = (Button) findViewById(R.id.btn_destino);
         btnRequestDirection = (Button) findViewById(R.id.btn_request_direction);
         btn_origen.setOnClickListener(this);
+        btn_destino.setOnClickListener(this);
 
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
 
@@ -249,6 +253,23 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
 
         }
+
+        if (id == R.id.btn_destino) {
+
+            // llamar a metodo para cambiar el estado.
+
+            // enviar id y estado a actualizar.
+
+            Recorrido r = new Recorrido();
+
+            r.setId(this.id);
+
+            r.setEstado("2");
+
+            new GestionarRecorridos(r, 2, null).execute("");
+
+
+        }
        /* if (id == R.id.btn_request_direction) {
             if (mostrandoMapa == false) {
                 color = Color.parseColor("#2196F3");
@@ -271,6 +292,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                 .from(origin)
                 .to(destination)
                 .transportMode(TransportMode.DRIVING)
+                .language(Language.SPANISH)
                 .execute(this);
 
         origenActual = origin;
@@ -439,6 +461,25 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         protected void onPostExecute(Integer result) {
 
             //new TareaAsincronica().execute();
+            if (i == 2)
+            {
+                switch (r.getEstado()){
+
+                    case "1":
+                        Snackbar.make(btn_origen, "Se ha modificado el estado del recorrido correctamente. Usted ha llegado a Origen", Snackbar.LENGTH_LONG).show();
+                    break;
+
+                    case "2":
+                        Snackbar.make(btn_origen, "Se ha modificado el estado del recorrido correctamente. Usted ha llegado a Destino", Snackbar.LENGTH_LONG).show();
+                        break;
+
+                }
+
+                btn_origen.setVisibility(View.INVISIBLE);
+
+                btn_destino.setVisibility(View.VISIBLE);
+
+            }
 
         }
 

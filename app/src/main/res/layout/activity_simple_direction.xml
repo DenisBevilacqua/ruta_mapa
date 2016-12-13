@@ -56,6 +56,17 @@
         android:visibility="invisible" />
 
     <Button
+        android:id="@+id/btn_destino"
+        android:layout_height="wrap_content"
+        android:text="Llegué a Destino"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="53dp"
+        android:elevation="10dp"
+        android:layout_width="wrap_content"
+        android:visibility="invisible" />
+
+    <Button
         android:text="Mi ubicación"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
