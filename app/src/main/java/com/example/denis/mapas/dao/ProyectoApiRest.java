@@ -91,6 +91,13 @@ public class ProyectoApiRest {
 
     }
 
+    public void actualizarUsuarioRecorrido(String id_recorrido, String id_usuario) {
+
+        RestClient cliRest = new RestClient();
+        cliRest.actualizarUsuarioRecorrido(id_recorrido, id_usuario, "recorridos");
+
+    }
+
     /*public ArrayList<ArrayList> listarProyectos(){
         ArrayList<String> listaProyectos = new ArrayList<String>();
         ArrayList<Integer> idProyectos = new ArrayList<Integer>();
