@@ -135,6 +135,16 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
     }
 
+
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        MenuItem alarma = menu.findItem(R.id.actDescAlarma);
+
+        alarma.setVisible(false);
+
+        return true;
+    }
+
     @Override
     public void processFinish(LatLng origen, LatLng destino, String name1, String name2) {
         //Here you will receive the result fired from async class
