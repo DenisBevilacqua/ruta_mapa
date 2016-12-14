@@ -23,6 +23,8 @@ import com.example.denis.mapas.modelo.Recorrido;
 import com.example.denis.mapas.recorridos.ListadoRecorridosActivity;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Random;
+
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -70,19 +72,24 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // For our recurring task, we'll just display a message
 
-        int milisegundos = (int) System.currentTimeMillis();
-        Integer resto = milisegundos % 4;
+        /*int milisegundos = (int) System.currentTimeMillis();
+        Integer resto = milisegundos % 4;*/
+
+        Random r = new Random();
+        int Low = 0;
+        int High = 3;
+        int resto = r.nextInt(High-Low) + Low;
 
         if(resto == 0) {
             new GetRecorridoAleatorio(resto).execute("");
             showNotification(context, r1.getNombre_origen(), r1.getNombre_destino());
-        }if(resto == 1) {
+        }else if(resto == 1) {
             new GetRecorridoAleatorio(resto).execute("");
             showNotification(context, r2.getNombre_origen(), r2.getNombre_destino());
-        }if(resto == 2) {
+        }else if(resto == 2) {
             new GetRecorridoAleatorio(resto).execute("");
             showNotification(context, r3.getNombre_origen(), r3.getNombre_destino());
-        }if(resto == 3) {
+        }else if(resto == 3) {
             new GetRecorridoAleatorio(resto).execute("");
             showNotification(context, r4.getNombre_origen(), r4.getNombre_destino());
         } else
