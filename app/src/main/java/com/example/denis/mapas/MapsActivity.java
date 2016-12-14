@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import im.delight.android.location.SimpleLocation;
 
@@ -59,12 +60,14 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     private LatLng destinoActual;
     private Integer color;
     private String id;
+    final String[] idTemporal = {"0"};
+    final private String id_temporal = null;
     static public Context contexto;
     private Boolean mostrarMiUbicacion = false;
 
     private boolean mostrandoMapa = false;
     private SimpleLocation location;
-    GetLatLngFromString asyncTask =new GetLatLngFromString();
+    GetLatLngFromString asyncTask = new GetLatLngFromString();
     static final int ALTA_RUTA = 1;  // The request code
     static final int RECORRIDO = 2;  // The request code
 
@@ -96,8 +99,6 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
         // construct a new instance of SimpleLocation
         location = new SimpleLocation(this);
-
-
 
 
         // if we can't access the location yet
@@ -132,7 +133,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     }
 
     @Override
-    public void processFinish(LatLng origen, LatLng destino, String name1, String name2){
+    public void processFinish(LatLng origen, LatLng destino, String name1, String name2) {
         //Here you will receive the result fired from async class
         //of onPostExecute(result) method.
 
@@ -164,6 +165,19 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             return true;
         }
 
+        if (id == R.id.cerrar_sesion) {
+
+            Intent intActAlta = new Intent(getApplicationContext(), LoginActivity.class);
+            //intActAlta.putExtra("ID_TAREA", 0);
+            // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+            startActivity(intActAlta);
+            //startActivityForResult(intActAlta, ALTA_RUTA);
+
+            finish();
+
+            return true;
+        }
+
         if (id == R.id.nueva_ruta) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
@@ -186,9 +200,19 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
+
                     // Antes debemos poner el pedido en estado 0
 
-                    Intent intActAlta= new Intent(getApplicationContext(),AltaRecorrido.class);
+                    Recorrido r = new Recorrido();
+
+                    r.setId(idTemporal[0]);
+
+                    r.setEstado("0");
+
+                    new GestionarRecorridos(r, 2, null).execute("");
+
+
+                    Intent intActAlta = new Intent(getApplicationContext(), AltaRecorrido.class);
                     //intActAlta.putExtra("ID_TAREA", 0);
                     // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
                     startActivity(intActAlta);
@@ -227,7 +251,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                 textview.setText("Ingrese descripción");
                 builder.setCustomTitle(textview);*/
 
-           // builder.setView(input);
+            // builder.setView(input);
 
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
@@ -236,7 +260,15 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
                     // Antes debemos poner el pedido en estado 0
 
-                    Intent ListadoRecorridos= new Intent(getApplicationContext(),ListadoRecorridosActivity.class);
+                    Recorrido r = new Recorrido();
+
+                    r.setId(idTemporal[0]);
+
+                    r.setEstado("0");
+
+                    new GestionarRecorridos(r, 2, null).execute("");
+
+                    Intent ListadoRecorridos = new Intent(getApplicationContext(), ListadoRecorridosActivity.class);
                     //intActAlta.putExtra("ID_TAREA", 0);
                     // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
                     startActivityForResult(ListadoRecorridos, RECORRIDO);
@@ -283,24 +315,23 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
         Intent intent = getIntent();
 
-        Integer activity = intent.getIntExtra("activity",-1);
+        Integer activity = intent.getIntExtra("activity", -1);
 
-        if (activity==0)
-        {
+        if (activity == 0) {
 
-            Double latO = intent.getDoubleExtra("LatO",-1.0);
-            Double lngO = intent.getDoubleExtra("LngO",-1.0);
-            Double latD = intent.getDoubleExtra("LatD",-1.0);
-            Double lngD = intent.getDoubleExtra("LngD",-1.0);
+            Double latO = intent.getDoubleExtra("LatO", -1.0);
+            Double lngO = intent.getDoubleExtra("LngO", -1.0);
+            Double latD = intent.getDoubleExtra("LatD", -1.0);
+            Double lngD = intent.getDoubleExtra("LngD", -1.0);
             id = intent.getStringExtra("id");
 
-            Log.d("lat",""+ latO);
+            Log.d("lat", "" + latO);
 
             color = Color.parseColor("#2196F3");
 
-            originRoute = new LatLng(latO,lngO);
+            originRoute = new LatLng(latO, lngO);
 
-            requestDirection(new LatLng(latO,lngO), new LatLng(latD,lngD) , color);
+            requestDirection(new LatLng(latO, lngO), new LatLng(latD, lngD), color);
 
             btn_origen.setVisibility(View.VISIBLE);
 
@@ -311,6 +342,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             r.setEstado("4");
 
             new GestionarRecorridos(r, 2, null).execute("");
+
+            idTemporal[0] = this.id;
 
         }
 
@@ -397,24 +430,23 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             googleMap.addMarker(new MarkerOptions().position(destinoActual).title("Destino"));
 
             ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
-            googleMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 7, color ));
+            googleMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 7, color));
 
             // Calculamos distancia entre ambos puntos
 
             Double distancia = location.calculateDistance(origenActual.latitude, origenActual.longitude, destinoActual.latitude, destinoActual.longitude);
 
-            distancia = Math.round( distancia * 100.0 ) / 100.0;
+            distancia = Math.round(distancia * 100.0) / 100.0;
 
             Toast.makeText(getApplicationContext(), "La distancia entre origen y destino es de: " + distancia + " metros",
                     Toast.LENGTH_LONG).show();
 
-            if (mostrarMiUbicacion == false)
-            {
+            if (mostrarMiUbicacion == false) {
                 location.beginUpdates();
 
                 final double latitude = location.getLatitude();
                 final double longitude = location.getLongitude();
-                miUbicacion = new LatLng(latitude,longitude);
+                miUbicacion = new LatLng(latitude, longitude);
 
                 googleMap.addMarker(new MarkerOptions().position(miUbicacion).title("Mi ubicación"));
 
@@ -486,8 +518,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
                 Recorrido recorrido = (Recorrido) getIntent().getSerializableExtra("MyClass");
 
-                Log.d("Llegamos con recorrido ",recorrido.getNombre_origen());
-                Log.d("Llegamos con recorrido ",recorrido.getNombre_destino());
+                Log.d("Llegamos con recorrido ", recorrido.getNombre_origen());
+                Log.d("Llegamos con recorrido ", recorrido.getNombre_destino());
 
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
@@ -499,16 +531,16 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
 
-                    //Log.d("ID_RECORRIDO SELECCIONDO",""+ id);
-                    Double latO = data.getDoubleExtra("LatO",-1.0);
-                    Double lngO = data.getDoubleExtra("LngO",-1.0);
-                    Double latD = data.getDoubleExtra("LatD",-1.0);
-                    Double lngD = data.getDoubleExtra("LngD",-1.0);
+                //Log.d("ID_RECORRIDO SELECCIONDO",""+ id);
+                Double latO = data.getDoubleExtra("LatO", -1.0);
+                Double lngO = data.getDoubleExtra("LngO", -1.0);
+                Double latD = data.getDoubleExtra("LatD", -1.0);
+                Double lngD = data.getDoubleExtra("LngD", -1.0);
 
-                    Log.d("lat",""+ latO);
+                Log.d("lat", "" + latO);
 
-                    color = Color.parseColor("#2196F3");
-                    requestDirection(new LatLng(latO,lngO), new LatLng(latD,lngD) , color);
+                color = Color.parseColor("#2196F3");
+                requestDirection(new LatLng(latO, lngO), new LatLng(latD, lngD), color);
 
             }
         }
@@ -518,7 +550,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         private Recorrido r;
         private Integer i;   //Valor que indica la operación que se quiere realizar: 1:crear, 2:borrar, 3:actualizar
         private Integer id;
-        public GestionarRecorridos(Recorrido r, Integer i, Integer id){
+
+        public GestionarRecorridos(Recorrido r, Integer i, Integer id) {
             this.r = r;
             this.i = i;
             this.id = id;
@@ -529,14 +562,16 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
             ProyectoApiRest rest = new ProyectoApiRest();
 
-            switch(i){
+            switch (i) {
                 case 1: {
                     rest.crearRecorrido(r);
-                    break;}
-                case 2:{
+                    break;
+                }
+                case 2: {
                     // Cambiar estado
-                    rest.actualizarEstadoRecorrido(r.getId(),r.getEstado());
-                }break;
+                    rest.actualizarEstadoRecorrido(r.getId(), r.getEstado());
+                }
+                break;
             }
             return 1;
         }
@@ -545,27 +580,68 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         protected void onPostExecute(Integer result) {
 
             //new TareaAsincronica().execute();
-            if (i == 2)
-            {
-                switch (r.getEstado()){
+            if (i == 2) {
+                switch (r.getEstado()) {
 
                     case "1":
                         Snackbar.make(btn_origen, "Se ha modificado el estado del recorrido correctamente. Usted ha llegado a Origen", Snackbar.LENGTH_LONG).show();
-                    break;
+                        btn_origen.setVisibility(View.INVISIBLE);
+                        btn_destino.setVisibility(View.VISIBLE);
+                        break;
 
                     case "2":
                         Snackbar.make(btn_origen, "Se ha modificado el estado del recorrido correctamente. Usted ha llegado a Destino", Snackbar.LENGTH_LONG).show();
-                        break;
 
-                    case "4":
-                        Snackbar.make(btn_origen, "El pedido ha sido tomado correctamente por usted.", Snackbar.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+                        builder.setTitle("Se ha completado el pedido. ¿Desea realizar otro pedido?");
+
+                        final EditText input = new EditText(MapsActivity.this);
+
+                        //input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                        //input.setHint("Descripción del proyecto");
+
+                /*final TextView textview = new TextView(ProyectosActivity.this);
+                textview.setText("Ingrese descripción");
+                builder.setCustomTitle(textview);*/
+
+                        // builder.setView(input);
+
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+
+
+                                Intent intActAlta = new Intent(getApplicationContext(), ListadoRecorridosActivity.class);
+                                //intActAlta.putExtra("ID_TAREA", 0);
+                                // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+                                startActivity(intActAlta);
+                                //startActivityForResult(intActAlta, ALTA_RUTA);
+
+                                finish();
+
+
+                            }
+                        });
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //dialog.cancel();
+                                int pid = android.os.Process.myPid();
+                                android.os.Process.killProcess(pid);
+                            }
+                        });
+
+                        builder.show();
+
+
                         break;
 
                 }
 
-                btn_origen.setVisibility(View.INVISIBLE);
 
-                btn_destino.setVisibility(View.VISIBLE);
 
             }
 

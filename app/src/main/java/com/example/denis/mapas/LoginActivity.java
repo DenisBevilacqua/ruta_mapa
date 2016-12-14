@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mPasswordView = (EditText) findViewById(R.id.password);
 
-        mEmailView.setText("denis@mail.com");
+        mEmailView.setText("trabajo_final@gmail.com");
         mPasswordView.setText("mipassword");
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -390,6 +390,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Log.d("logueamos ", "exitosamente");
                     Intent pantallaPricipalIntent = new Intent(context, ListadoRecorridosActivity.class);
                     startActivity(pantallaPricipalIntent);
+                    finish();
 
                 }
                 else

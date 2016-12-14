@@ -2,9 +2,11 @@ package com.example.denis.mapas.recorridos;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -22,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.denis.mapas.MapsActivity;
@@ -97,8 +100,49 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ListadoRecorridosActivity.this);
+                builder.setTitle("¿Desea generar un nuevo pedido?");
+
+                final EditText input = new EditText(ListadoRecorridosActivity.this);
+
+                //input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                //input.setHint("Descripción del proyecto");
+
+                /*final TextView textview = new TextView(ProyectosActivity.this);
+                textview.setText("Ingrese descripción");
+                builder.setCustomTitle(textview);*/
+
+                // builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        Intent intActAlta = new Intent(getApplicationContext(), AltaRecorrido.class);
+                        //intActAlta.putExtra("ID_TAREA", 0);
+                        // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+                        startActivity(intActAlta);
+                        //startActivityForResult(intActAlta, ALTA_RUTA);
+
+                        finish();
+
+
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
             }
         });
     }
