@@ -148,6 +148,34 @@ public class ProyectoApiRest {
 
         return listaRecorridos;
     }
+    public ArrayList<Recorrido> listarRecorridosHistorial() {
+        ArrayList<Recorrido> listaRecorridos = new ArrayList<Recorrido>();
+        RestClient cliRest = new RestClient();
+        JSONArray array = cliRest.getByAll(null, "recorridos?id_usuario=2?estado=2");
+        for (int i = 0; i < array.length(); i++) {
+            try {
+                JSONObject o = array.getJSONObject(i);
+                Recorrido r = new Recorrido();
+
+                r.setNombre_destino(o.getString("nombre_destino"));
+                r.setNombre_origen(o.getString("nombre_origen"));
+                r.setOrigen(new LatLng(Double.parseDouble(o.getString("origen_latitud")), Double.parseDouble(o.getString("origen_longitud"))));
+                r.setDestino(new LatLng(Double.parseDouble(o.getString("destino_latitud")), Double.parseDouble(o.getString("destino_longitud"))));
+                r.setEstado(o.getString("estado"));
+                r.setId(o.getString("id"));
+                Log.d("NOMBRE ORIGEN", r.getNombre_origen());
+
+                if (r.getEstado().equals("0")) listaRecorridos.add(r);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return listaRecorridos;
+    }
 
     public Recorrido buscarRecorrido(Integer id) {
         RestClient cliRest = new RestClient();
