@@ -52,6 +52,10 @@
             android:label="@string/title_activity_listado_recorridos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".recorridos.ListadoHistorialActivity"
+            android:label="@string/title_activity_listado_recorridos"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
             <intent-filter>

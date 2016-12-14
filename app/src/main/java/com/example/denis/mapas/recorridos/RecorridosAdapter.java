@@ -50,8 +50,13 @@ public class RecorridosAdapter extends ArrayAdapter<Recorrido> {
 
         origen.setText(this.getItem(position).getNombre_origen().toString());
         destino.setText(this.getItem(position).getNombre_destino().toString());
+        try {
         id.setText("Ubicación Actual a Origen: "+this.getItem(position).getDistanciaOrigen().toString()+" metros.");
-
+        }
+        catch (Exception e)
+        {
+            id.setText("Pedido realizado");
+        }
         Integer color = Color.parseColor("#2196F3");
 
         origen.setTextColor(color);

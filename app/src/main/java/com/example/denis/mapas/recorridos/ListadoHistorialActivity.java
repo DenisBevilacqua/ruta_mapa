@@ -29,8 +29,12 @@ public class ListadoHistorialActivity extends AppCompatActivity {
 
         listadoHistorial = (ListView) findViewById(R.id.listadoRecorridos);
 
-        setTitle("Recorridos disponibles");
+        setTitle("Mis pedidos realizados");
+
+        new ListarRecorridos().execute();
+
     }
+
     private class ListarRecorridos extends AsyncTask<String, Void, ArrayList<Recorrido>> {
         @Override
         protected ArrayList<Recorrido> doInBackground(String... params) {
@@ -49,6 +53,7 @@ public class ListadoHistorialActivity extends AppCompatActivity {
             // Traer de api rest el listado de recorridos.
 
             RecorridosAdapter adapter = new RecorridosAdapter(getApplicationContext(), listaRecorridos);
+
             listadoHistorial.setAdapter(adapter);
         }
 

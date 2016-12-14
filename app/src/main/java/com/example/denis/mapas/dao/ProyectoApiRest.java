@@ -151,7 +151,7 @@ public class ProyectoApiRest {
     public ArrayList<Recorrido> listarRecorridosHistorial() {
         ArrayList<Recorrido> listaRecorridos = new ArrayList<Recorrido>();
         RestClient cliRest = new RestClient();
-        JSONArray array = cliRest.getByAll(null, "recorridos?id_usuario=2?estado=2");
+        JSONArray array = cliRest.getByAll(null, "recorridos?id_usuario=2&estado=2");
         for (int i = 0; i < array.length(); i++) {
             try {
                 JSONObject o = array.getJSONObject(i);
@@ -165,7 +165,7 @@ public class ProyectoApiRest {
                 r.setId(o.getString("id"));
                 Log.d("NOMBRE ORIGEN", r.getNombre_origen());
 
-                if (r.getEstado().equals("0")) listaRecorridos.add(r);
+                listaRecorridos.add(r);
 
 
             } catch (JSONException e) {

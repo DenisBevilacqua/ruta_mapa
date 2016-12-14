@@ -46,6 +46,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
     private ListView listadoRecorridos;
     private ArrayList<Recorrido> listaRecorridos;
+    static final int RECORRIDO = 2;
 
     private LatLng originRoute = new LatLng(-31.635468, -60.701156);
     private SimpleLocation location;
@@ -67,7 +68,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
         registerForContextMenu(listadoRecorridos);
 
-        setTitle("Recorridos disponibles");
+        setTitle("Pedidos pendientes");
 
         if(alarmaActivada) generarAlarma();
 
@@ -441,6 +442,21 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
                 Snackbar.make(listadoRecorridos, "Se activarán las notificaciones en 10s", Snackbar.LENGTH_LONG).show();
             }
 
+        }
+
+        if (id == R.id.historial) {
+
+
+            Intent listadoHistorial = new Intent(getApplicationContext(), ListadoHistorialActivity.class);
+            //intActAlta.putExtra("ID_TAREA", 0);
+            // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+            startActivityForResult(listadoHistorial, RECORRIDO);
+            //startActivityForResult(intActAlta, ALTA_RUTA);
+
+            finish();
+
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
