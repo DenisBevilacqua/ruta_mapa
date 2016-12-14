@@ -8,15 +8,24 @@ public class Usuario {
     private Integer id;
     private String nombre;
     private String correoElectronico;
-
-    public Usuario(){
-
-    }
+    private String contraseña;
 
     public Usuario(Integer id, String nombre, String correoElectronico) {
         this.id = id;
         this.nombre = nombre;
         this.correoElectronico = correoElectronico;
+    }
+
+    public Usuario(){
+
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
     public Integer getId() {

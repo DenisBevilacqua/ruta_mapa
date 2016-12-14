@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +32,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.denis.mapas.Seguridad.AESencrp;
+import com.example.denis.mapas.dao.ProyectoApiRest;
+import com.example.denis.mapas.modelo.Usuario;
 import com.example.denis.mapas.recorridos.ListadoRecorridosActivity;
 
 import java.util.ArrayList;
@@ -75,6 +79,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         context = getApplicationContext();
         populateAutoComplete();
+
+
+        /*AESencrp seguridad = new AESencrp();
+        try {
+            String contraseña = AESencrp.encrypt("mipassword");
+            Log.d("Contraseña camuflada " ,contraseña);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -299,7 +313,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Tarea asincrónica empleada para logueo y registración de un usuario.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, Usuario> {
 
         private final String mEmail;
         private final String mPassword;
@@ -310,49 +324,87 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Usuario doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
             // Debemos conectarnos a una api rest con usuarios registrados y dar la posibilidad de registrar un nuevo usuario.
 
+
+            ProyectoApiRest p = new ProyectoApiRest();
+
+            // Encriptamos la contraseña.
+
+            AESencrp seguridad = new AESencrp();
+
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+
+                String mPasswordEncriptado = AESencrp.encrypt(mPassword);
+
+                Usuario u = p.validarUsuario(mEmail, mPasswordEncriptado);
+
+                return u;
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
+
+            /*for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
-            }
+            }*/
 
             // TODO: register the new account here.
-            return true;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Usuario u) {
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            //if (success) {
 
-                // Si se ha logueado correctamente debems ingresar.
-                // Vamos a la pantalla principal.
+            // Si se ha logueado correctamente debems ingresar.
+            // Vamos a la pantalla principal.
 
-                Intent pantallaPricipalIntent= new Intent(context,ListadoRecorridosActivity.class);
-                startActivity(pantallaPricipalIntent);
+            try {
+
+                String clave = u.getContraseña();
+
+                AESencrp seguridad = new AESencrp();
 
 
-                finish();
-            } else {
+                String contraseñaDesencriptada = AESencrp.decrypt(clave);
+
+                Log.d("contraseña desen ", contraseñaDesencriptada);
+                Log.d("contraseña ingre ", mPassword);
+                if (contraseñaDesencriptada.equals(mPassword)) {
+                    Log.d("logueamos ", "exitosamente");
+                    Intent pantallaPricipalIntent = new Intent(context, ListadoRecorridosActivity.class);
+                    startActivity(pantallaPricipalIntent);
+
+                }
+                else
+                {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+
+
+            //finish();
+            // } else {
+            /*mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();*/
+            // }
         }
 
         @Override
@@ -360,6 +412,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+
+
     }
 }
 

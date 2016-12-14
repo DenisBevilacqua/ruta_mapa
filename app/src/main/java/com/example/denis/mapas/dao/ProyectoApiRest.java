@@ -87,7 +87,7 @@ public class ProyectoApiRest {
     public void actualizarEstadoRecorrido(String id, String estado) {
 
         RestClient cliRest = new RestClient();
-        cliRest.actualizarEstado(id, estado , "recorridos");
+        cliRest.actualizarEstado(id, estado, "recorridos");
 
     }
 
@@ -167,7 +167,7 @@ public class ProyectoApiRest {
         //Log.d("Tareas del Proyecto: "+p.getId(),array.toString());
     }
 
-    public Integer existeUsuario(String nombre_usuario) {
+    public Integer existeUsuario(String nombre_usuario, String contraseña) {
         Integer idResultado = 0;
         RestClient cliRest = new RestClient();
         JSONArray jsonArray = cliRest.getByAll(null, "usuarios?nombre=" + nombre_usuario);
@@ -186,4 +186,41 @@ public class ProyectoApiRest {
         RestClient cliRest = new RestClient();
         cliRest.crearUsuario(u, "usuarios");
     }
+
+    public Usuario validarUsuario(String mEmail, String mPassword) {
+
+        Usuario u = new Usuario();
+        u.setCorreoElectronico(mEmail);
+        u.setContraseña(mPassword);
+
+        RestClient cliRest = new RestClient();
+
+
+        JSONObject j = cliRest.validarUsuario(u);
+
+        try {
+
+            Usuario nuevo = new Usuario();
+
+            String clave = j.getString("contraseña");
+            String mail = j.getString("correoElectronico");
+
+            nuevo.setContraseña(clave);
+            nuevo.setCorreoElectronico(mail);
+            //nuevo.setId(idS);
+
+            String nombre = j.getString("nombre");
+            nuevo.setNombre(nombre);
+
+            return nuevo;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            //
+
+        }
+
+        return null;
+    }
+
 }

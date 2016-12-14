@@ -268,4 +268,38 @@ public class RestClient {
 
     }
 
+    public JSONObject validarUsuario(Usuario u) {
+        JSONObject resultado = null;
+        HttpURLConnection urlConnection=null;
+        try {
+            URL url = new URL("http://"+IP_SERVER+":"+PORT_SERVER+"/usuarios?correoElectronico="+u.getCorreoElectronico());
+            Log.d("TAG_LOG",url.getPath()+ " --> "+url.toString());
+            urlConnection= (HttpURLConnection) url.openConnection();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            InputStreamReader isw = new InputStreamReader(in);
+            StringBuilder sb = new StringBuilder();
+
+            int data = isw.read();
+            while (data != -1) {
+                char current = (char) data;
+                sb.append(current);
+                data = isw.read();
+            }
+            Log.d("TAG_LOG",url.getPath()+ " --> "+sb.toString());
+            JSONArray resultadoArray = new JSONArray(sb.toString());
+            resultado = resultadoArray.getJSONObject(0);
+
+            //isw.close();
+        }
+        catch (IOException e) {
+            Log.e("TEST-ARR",e.getMessage(),e);
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if(urlConnection!=null) urlConnection.disconnect();
+        }
+        return resultado;
+    }
+
 }
