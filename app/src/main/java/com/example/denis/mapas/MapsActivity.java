@@ -213,6 +213,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
                     new GestionarRecorridos(r, 2, null).execute("");
 
+                    new GestionarRecorridos(r, 3, "null").execute("");
+                    //rest.actualizarUsuarioRecorrido(r.getId(), "2");
 
                     Intent intActAlta = new Intent(getApplicationContext(), AltaRecorrido.class);
                     //intActAlta.putExtra("ID_TAREA", 0);
@@ -269,6 +271,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                     r.setEstado("0");
 
                     new GestionarRecorridos(r, 2, null).execute("");
+
+                    new GestionarRecorridos(r, 3, "null").execute("");
 
                     Intent ListadoRecorridos = new Intent(getApplicationContext(), ListadoRecorridosActivity.class);
                     //intActAlta.putExtra("ID_TAREA", 0);
@@ -348,6 +352,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             new GestionarRecorridos(r, 2, null).execute("");
 
             idTemporal[0] = this.id;
+
+            new GestionarRecorridos(r, 3, "2").execute("");
 
         }
 
@@ -550,12 +556,12 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         }
     }
 
-    private class GestionarRecorridos extends AsyncTask<Object, Object, Integer> {
+    private class GestionarRecorridos extends AsyncTask<Object, Object, Object> {
         private Recorrido r;
         private Integer i;   //Valor que indica la operación que se quiere realizar: 1:crear, 2:borrar, 3:actualizar
-        private Integer id;
+        private String id;
 
-        public GestionarRecorridos(Recorrido r, Integer i, Integer id) {
+        public GestionarRecorridos(Recorrido r, Integer i, String id) {
             this.r = r;
             this.i = i;
             this.id = id;
@@ -574,13 +580,21 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                 case 2: {
                     // Cambiar estado
                     rest.actualizarEstadoRecorrido(r.getId(), r.getEstado());
+
+                    break;
                 }
-                break;
+                case 3: {
+                    // Cambiar usuario recorrido
+                    rest.actualizarUsuarioRecorrido(r.getId(), id);
+
+                    break;
+                }
+
+
             }
             return 1;
         }
 
-        @Override
         protected void onPostExecute(Integer result) {
 
             //new TareaAsincronica().execute();
@@ -617,7 +631,6 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                             public void onClick(DialogInterface dialog, int which) {
 
 
-
                                 Intent intActAlta = new Intent(getApplicationContext(), ListadoRecorridosActivity.class);
                                 //intActAlta.putExtra("ID_TAREA", 0);
                                 // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
@@ -644,7 +657,6 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                         break;
 
                 }
-
 
 
             }

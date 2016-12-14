@@ -15,20 +15,25 @@ public class Recorrido implements Serializable {
 
     private transient LatLng origen;
     private transient LatLng destino;
-
     private transient String id;
     private transient Double origen_longitud;
     private transient Double origen_latitud;
     private transient Double destino_latitud;
     private transient Double destino_longitud;
-
-
     private transient Double distanciaOrigen;
-
     private transient String nombre_origen;
     private transient String nombre_destino;
+    private transient String id_usuario = "null";
 
     private String estado;
+
+    public String getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(String id_usuario) {
+        this.id_usuario = id_usuario;
+    }
 
     public Double getDistanciaOrigen() {
         return distanciaOrigen;
@@ -130,6 +135,7 @@ public class Recorrido implements Serializable {
             jsonObject.put("destino_longitud", getDestino_longitud() + "");
             jsonObject.put("nombre_origen", getNombre_origen() + "");
             jsonObject.put("nombre_destino", getNombre_destino() + "");
+            jsonObject.put("id_usuario", getId_usuario() + "");
             jsonObject.put("estado", "0");
             jsonObject.put("id", getId());
 
