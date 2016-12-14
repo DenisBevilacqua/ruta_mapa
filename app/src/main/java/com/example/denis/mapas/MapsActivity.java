@@ -33,6 +33,7 @@ import com.example.denis.mapas.dao.ProyectoApiRest;
 import com.example.denis.mapas.modelo.GetLatLngFromString;
 import com.example.denis.mapas.modelo.Recorrido;
 import com.example.denis.mapas.recorridos.AltaRecorrido;
+import com.example.denis.mapas.recorridos.ListadoHistorialActivity;
 import com.example.denis.mapas.recorridos.ListadoRecorridosActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -278,6 +279,64 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
                     //intActAlta.putExtra("ID_TAREA", 0);
                     // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
                     startActivityForResult(ListadoRecorridos, RECORRIDO);
+                    //startActivityForResult(intActAlta, ALTA_RUTA);
+
+                    finish();
+
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
+
+            return true;
+        }
+        if (id == R.id.historial) {
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+            builder.setTitle("Se cancelará el pedido actual");
+
+            final EditText input = new EditText(MapsActivity.this);
+
+            //input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            //input.setHint("Descripción del proyecto");
+
+                /*final TextView textview = new TextView(ProyectosActivity.this);
+                textview.setText("Ingrese descripción");
+                builder.setCustomTitle(textview);*/
+
+            // builder.setView(input);
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    // Antes debemos poner el pedido en estado 0
+
+                    Recorrido r = new Recorrido();
+
+                    r.setId(idTemporal[0]);
+
+                    r.setEstado("0");
+
+                    new GestionarRecorridos(r, 2, null).execute("");
+
+                    new GestionarRecorridos(r, 3, "null").execute("");
+
+                    Intent listadoHistorial = new Intent(getApplicationContext(), ListadoHistorialActivity.class);
+                    //intActAlta.putExtra("ID_TAREA", 0);
+                    // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+                    startActivityForResult(listadoHistorial, RECORRIDO);
                     //startActivityForResult(intActAlta, ALTA_RUTA);
 
                     finish();
