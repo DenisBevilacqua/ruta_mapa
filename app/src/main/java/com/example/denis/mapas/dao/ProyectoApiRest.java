@@ -130,7 +130,7 @@ public class ProyectoApiRest {
                 r.setId(o.getString("id"));
                 Log.d("NOMBRE ORIGEN", r.getNombre_origen());
 
-                if (r.getEstado() == "0") listaRecorridos.add(r);
+                if (r.getEstado().equals("0")) listaRecorridos.add(r);
 
 
             } catch (JSONException e) {

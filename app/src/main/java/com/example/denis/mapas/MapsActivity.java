@@ -1,7 +1,9 @@
 package com.example.denis.mapas;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -12,11 +14,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
@@ -162,24 +166,96 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
         if (id == R.id.nueva_ruta) {
 
-            Intent intActAlta= new Intent(this,AltaRecorrido.class);
-            //intActAlta.putExtra("ID_TAREA", 0);
-            // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
-            startActivity(intActAlta);
-            //startActivityForResult(intActAlta, ALTA_RUTA);
+            AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+            builder.setTitle("Se cancelará el pedido actual");
+
+            final EditText input = new EditText(MapsActivity.this);
+
+            //input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            //input.setHint("Descripción del proyecto");
+
+                /*final TextView textview = new TextView(ProyectosActivity.this);
+                textview.setText("Ingrese descripción");
+                builder.setCustomTitle(textview);*/
+
+            // builder.setView(input);
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    // Antes debemos poner el pedido en estado 0
+
+                    Intent intActAlta= new Intent(getApplicationContext(),AltaRecorrido.class);
+                    //intActAlta.putExtra("ID_TAREA", 0);
+                    // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+                    startActivity(intActAlta);
+                    //startActivityForResult(intActAlta, ALTA_RUTA);
+
+                    finish();
+
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
 
             return true;
         }
 
         if (id == R.id.listado_recorridos) {
 
-            Intent ListadoRecorridos= new Intent(this,ListadoRecorridosActivity.class);
-            //intActAlta.putExtra("ID_TAREA", 0);
-            // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
-            startActivityForResult(ListadoRecorridos, RECORRIDO);
-            //startActivityForResult(intActAlta, ALTA_RUTA);
+            AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
+            builder.setTitle("Se cancelará el pedido actual");
 
-            finish();
+            final EditText input = new EditText(MapsActivity.this);
+
+            //input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            //input.setHint("Descripción del proyecto");
+
+                /*final TextView textview = new TextView(ProyectosActivity.this);
+                textview.setText("Ingrese descripción");
+                builder.setCustomTitle(textview);*/
+
+           // builder.setView(input);
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    // Antes debemos poner el pedido en estado 0
+
+                    Intent ListadoRecorridos= new Intent(getApplicationContext(),ListadoRecorridosActivity.class);
+                    //intActAlta.putExtra("ID_TAREA", 0);
+                    // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+                    startActivityForResult(ListadoRecorridos, RECORRIDO);
+                    //startActivityForResult(intActAlta, ALTA_RUTA);
+
+                    finish();
+
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
 
             return true;
         }
@@ -227,6 +303,14 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             requestDirection(new LatLng(latO,lngO), new LatLng(latD,lngD) , color);
 
             btn_origen.setVisibility(View.VISIBLE);
+
+            Recorrido r = new Recorrido();
+
+            r.setId(this.id);
+
+            r.setEstado("4");
+
+            new GestionarRecorridos(r, 2, null).execute("");
 
         }
 
@@ -471,6 +555,10 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
                     case "2":
                         Snackbar.make(btn_origen, "Se ha modificado el estado del recorrido correctamente. Usted ha llegado a Destino", Snackbar.LENGTH_LONG).show();
+                        break;
+
+                    case "4":
+                        Snackbar.make(btn_origen, "El pedido ha sido tomado correctamente por usted.", Snackbar.LENGTH_LONG).show();
                         break;
 
                 }

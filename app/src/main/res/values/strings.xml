@@ -7,7 +7,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Mail</string>
     <string name="prompt_password">Contraseña</string>
-    <string name="action_sign_in">Ingresar o registrarse</string>
+    <string name="action_sign_in">Ingresar</string>
     <string name="action_sign_in_short">Ingresar</string>
     <string name="error_invalid_email">La dirección de mail es inválida</string>
     <string name="error_invalid_password">La contraseña es muy corta</string>

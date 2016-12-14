@@ -104,7 +104,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         mBuilder.setContentTitle("Nuevo Recorrido");
         mBuilder.setContentText("Origen: " + origen);
         mBuilder.setTicker("Se ha generado un Recorrido");
-        mBuilder.setSmallIcon(R.drawable.ic_menu_camera);
+        mBuilder.setSmallIcon(R.drawable.location);
 
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
         bigText.bigText("Origen: " + origen + "\nDestino: " + destino);
