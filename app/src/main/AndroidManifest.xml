@@ -35,12 +35,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <receiver
+            android:name=".alarma.AlarmReceiver"
+            android:enabled="true"
+            android:process=":remote"></receiver>
         <activity android:name=".recorridos.AltaRecorrido" />
         <activity
             android:name=".recorridos.ListadoRecorridosActivity"

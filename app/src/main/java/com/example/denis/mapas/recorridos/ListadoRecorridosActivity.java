@@ -1,11 +1,12 @@
 package com.example.denis.mapas.recorridos;
 
 import android.Manifest;
-import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,31 +14,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.denis.mapas.MapsActivity;
 import com.example.denis.mapas.R;
+import com.example.denis.mapas.alarma.AlarmReceiver;
 import com.example.denis.mapas.dao.ProyectoApiRest;
 import com.example.denis.mapas.modelo.Recorrido;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Calendar;
 
 import im.delight.android.location.SimpleLocation;
 
@@ -48,6 +43,9 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
     private LatLng originRoute = new LatLng(-31.635468, -60.701156);
     private SimpleLocation location;
+
+    NotificationManager mNotificationManager;
+    private PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
         setTitle("Recorridos disponibles");
 
-        // Ejecutamos la tarea asincrónica.
+        generarAlarma();
 
         location = new SimpleLocation(this);
         // if we can't access the location yet
@@ -71,6 +69,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
             SimpleLocation.openSettings(this);
         }
 
+        // Ejecutamos la tarea asincrónica.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             Log.d("Peticion de permisos", " entra al if de SDK_INT");
 
@@ -87,7 +86,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
                 Log.d("Peticion de permisos", " entra al else");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
             }
-        }else{
+        } else {
             location.beginUpdates();
             new ListarRecorridos().execute("");
         }
@@ -103,6 +102,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private class GestionarRecorridos extends AsyncTask<Object, Object, Integer> {
         private Recorrido r;
@@ -159,7 +159,6 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
         protected ArrayList<Recorrido> doInBackground(String... params) {
             ProyectoApiRest rest = new ProyectoApiRest();
             ArrayList<Recorrido> listaRecorridos = rest.listarRecorridos();
-
 
 
             originRoute = new LatLng(location.getLatitude(), location.getLongitude());
@@ -231,7 +230,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
                 returnIntent.putExtra("LngO", LatLngO.longitude);
                 returnIntent.putExtra("LatD", LatLngD.latitude);
                 returnIntent.putExtra("LngD", LatLngD.longitude);
-
+                returnIntent.putExtra("id", result);
                 startActivity(returnIntent);
                 //setResult(Activity.RESULT_OK,returnIntent);
 
@@ -270,4 +269,24 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
         // other 'case' lines to check for other
         // permissions this app might request
     }
+
+    private void generarAlarma() {
+
+
+
+        final Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+
+        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+
+        final AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        Log.d("Calendar", calendar.getTimeInMillis() + "");
+
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + 10000, 60 * 1000, pendingIntent);
+
+    }
+
+
 }
