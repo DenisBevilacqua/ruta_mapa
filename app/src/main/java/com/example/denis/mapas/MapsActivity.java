@@ -566,7 +566,7 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
         }
     }
 
-    private class GestionarRecorridos extends AsyncTask<Object, Object, Object> {
+    private class GestionarRecorridos extends AsyncTask<Object, Object, Integer> {
         private Recorrido r;
         private Integer i;   //Valor que indica la operación que se quiere realizar: 1:crear, 2:borrar, 3:actualizar
         private String id;
@@ -602,12 +602,16 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
 
 
             }
-            return 1;
+            return i;
         }
 
         protected void onPostExecute(Integer result) {
 
             //new TareaAsincronica().execute();
+
+            Log.d("result " ,result+"");
+            Log.d("i " ,i+"");
+            Log.d(".getEstado() " ,r.getEstado());
             if (i == 2) {
                 switch (r.getEstado()) {
 
