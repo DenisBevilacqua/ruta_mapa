@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -339,9 +340,24 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
     }
 
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        MenuItem limpiar = menu.findItem(R.id.limpiar);
+
+        limpiar.setVisible(false);
+
+        MenuItem listado = menu.findItem(R.id.listado_recorridos);
+
+        listado.setVisible(false);
+
+        return true;
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
