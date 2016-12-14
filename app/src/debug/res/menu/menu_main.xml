@@ -24,4 +24,9 @@
         android:orderInCategory="100"
         android:title="Cerrar sesión"
         app:showAsAction="never" />
+    <item
+    android:id="@+id/actDescAlarma"
+    android:orderInCategory="100"
+    android:title="Iniciar/Detener Notificaciones"
+    app:showAsAction="never" />
 </menu>

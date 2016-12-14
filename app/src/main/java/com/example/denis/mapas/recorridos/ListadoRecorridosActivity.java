@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.denis.mapas.LoginActivity;
 import com.example.denis.mapas.MapsActivity;
 import com.example.denis.mapas.R;
 import com.example.denis.mapas.alarma.AlarmReceiver;
@@ -49,6 +51,9 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
     NotificationManager mNotificationManager;
     private PendingIntent pendingIntent;
+    private static Boolean alarmaActivada = false;
+
+    final String[] idTemporal = {"0"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,7 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
         setTitle("Recorridos disponibles");
 
-        generarAlarma();
+        if(alarmaActivada) generarAlarma();
 
         location = new SimpleLocation(this);
         // if we can't access the location yet
@@ -263,6 +268,8 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
                 String result = listaRecorridos.get(info.position).getId();
                 LatLng LatLngO = listaRecorridos.get(info.position).getOrigen();
                 LatLng LatLngD = listaRecorridos.get(info.position).getDestino();
+                String nombreOrigen = listaRecorridos.get(info.position).getNombre_origen();
+                String nombreDestino = listaRecorridos.get(info.position).getNombre_destino();
                 Log.d("ID_RECORRIDO", result);
                 Log.d("ID_POSITION", info.position + "");
                 //int resultado = Integer.parseInt(result);
@@ -274,6 +281,8 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
                 returnIntent.putExtra("LngO", LatLngO.longitude);
                 returnIntent.putExtra("LatD", LatLngD.latitude);
                 returnIntent.putExtra("LngD", LatLngD.longitude);
+                returnIntent.putExtra("Origen", nombreOrigen);
+                returnIntent.putExtra("Destino", nombreDestino);
                 returnIntent.putExtra("id", result);
                 startActivity(returnIntent);
                 //setResult(Activity.RESULT_OK,returnIntent);
@@ -316,8 +325,6 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
     private void generarAlarma() {
 
-
-
         final Intent alarmIntent = new Intent(this, AlarmReceiver.class);
 
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
@@ -332,5 +339,105 @@ public class ListadoRecorridosActivity extends AppCompatActivity {
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.limpiar) {
+
+            return true;
+        }
+
+        if (id == R.id.cerrar_sesion) {
+
+            Intent intActAlta = new Intent(getApplicationContext(), LoginActivity.class);
+            //intActAlta.putExtra("ID_TAREA", 0);
+            // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+            startActivity(intActAlta);
+            //startActivityForResult(intActAlta, ALTA_RUTA);
+
+            finish();
+
+            return true;
+        }
+
+        if (id == R.id.nueva_ruta) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+            builder.setTitle("Se cancelará el pedido actual");
+
+            final EditText input = new EditText(getApplicationContext());
+
+            //input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+            //input.setHint("Descripción del proyecto");
+
+                /*final TextView textview = new TextView(ProyectosActivity.this);
+                textview.setText("Ingrese descripción");
+                builder.setCustomTitle(textview);*/
+
+            // builder.setView(input);
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    Intent intActAlta = new Intent(getApplicationContext(), AltaRecorrido.class);
+                    //intActAlta.putExtra("ID_TAREA", 0);
+                    // intActAlta.putExtra("DAO", (Parcelable) proyectoDAO);
+                    startActivity(intActAlta);
+                    //startActivityForResult(intActAlta, ALTA_RUTA);
+
+                    finish();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
+            return true;
+        }
+
+        if (id == R.id.actDescAlarma) {
+            if(alarmaActivada){
+                alarmaActivada = false;
+                cancelRepeatingAlarm();
+                Snackbar.make(listadoRecorridos, "Se desactivarán las notificaciones", Snackbar.LENGTH_LONG).show();
+            }else{
+                alarmaActivada = true;
+                generarAlarma();
+                Snackbar.make(listadoRecorridos, "Se activarán las notificaciones en 10s", Snackbar.LENGTH_LONG).show();
+            }
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void cancelRepeatingAlarm(){
+        //Usar el intent usado para invocar TestReceiver
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        //Para cancelar no se necesita un extra
+        //intent.putExtra("message", "Repeating Alarm");
+        // Cancelar la alarma
+        AlarmManager am = (AlarmManager)
+                this.getSystemService(Context.ALARM_SERVICE);
+        am.cancel(pendingIntent);
+    }
 }

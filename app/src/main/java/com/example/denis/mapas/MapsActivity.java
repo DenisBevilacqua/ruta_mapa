@@ -58,6 +58,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
     private LatLng miUbicacion;
     private LatLng origenActual;
     private LatLng destinoActual;
+    private String origen;
+    private String destino;
     private Integer color;
     private String id;
     final String[] idTemporal = {"0"};
@@ -323,6 +325,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             Double lngO = intent.getDoubleExtra("LngO", -1.0);
             Double latD = intent.getDoubleExtra("LatD", -1.0);
             Double lngD = intent.getDoubleExtra("LngD", -1.0);
+            origen = intent.getStringExtra("Origen");
+            destino = intent.getStringExtra("Destino");
             id = intent.getStringExtra("id");
 
             Log.d("lat", "" + latO);
@@ -426,8 +430,8 @@ public class MapsActivity extends AppCompatActivity implements GetLatLngFromStri
             mostrandoMapa = true;
             //btnRequestDirection.setText("Limpiar mapa");
             //btnRequestDirection.setVisibility(View.VISIBLE);
-            googleMap.addMarker(new MarkerOptions().position(origenActual).title("Origen"));
-            googleMap.addMarker(new MarkerOptions().position(destinoActual).title("Destino"));
+            googleMap.addMarker(new MarkerOptions().position(origenActual).title(origen));
+            googleMap.addMarker(new MarkerOptions().position(destinoActual).title(destino));
 
             ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
             googleMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 7, color));
